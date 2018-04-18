@@ -7,13 +7,9 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-import { HelloPage} from '../pages/hello/hello';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-
-import { helloProvider } from '../providers/hello-prov/hello-prov';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -24,7 +20,6 @@ import { HttpClientModule } from '@angular/common/http';
     ContactPage,
     HomePage,
     TabsPage,
-    HelloPage
   ],
   imports: [
     BrowserModule,
@@ -38,13 +33,11 @@ import { HttpClientModule } from '@angular/common/http';
     ContactPage,
     HomePage,
     TabsPage,
-    HelloPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    helloProvider,
   ]
 })
 export class AppModule {}
