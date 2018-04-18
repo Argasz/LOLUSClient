@@ -12,8 +12,10 @@ import { HelloPage} from '../pages/hello/hello';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+
 import { helloProvider } from '../providers/hello-prov/hello-prov';
 import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
