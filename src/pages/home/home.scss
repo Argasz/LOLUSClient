@@ -1,5 +1,16 @@
 page-home {
+    ion-content {
+      @include linear-gradient(left, $green-beach);
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      background-size: cover;
+    }
     p {
-        color: red;
+        color: white;
+    }
+
+    h2 {
+      color: #0b486b;
+      text-align: center;
     }
 }
