@@ -1,20 +1,32 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
+  <ion-navbar hideBackButton="true">
+    <ion-title>Login</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <h2>LOLUS</h2>
 
-  <ion-list>
-    <ion-item>
+<ion-grid>
+  <ion-row>
+    <ion-col col-12>
       <ion-input type="email" placeholder="Mailadress"></ion-input>
-    </ion-item>
-    <ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-12>
       <ion-input type="password" placeholder="Lösenord"></ion-input>
-    </ion-item>
-  </ion-list>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-4>
+      <!--padding-->
+    </ion-col>
+    <ion-col col-8>
+        <button ion-button color="secondary" (click)="clickEvent($event)">Logga in</button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 
 
   <!--<ion-list>

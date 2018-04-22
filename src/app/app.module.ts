@@ -7,10 +7,13 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { KartaPage } from "../pages/karta/karta";
+import { HändelserPage } from "../pages/händelser/händelser";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClientModule } from '@angular/common/http';
+
 
 
 @NgModule({
@@ -20,6 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     ContactPage,
     HomePage,
     TabsPage,
+    KartaPage,
+    HändelserPage
   ],
   imports: [
     BrowserModule,
@@ -29,10 +34,10 @@ import { HttpClientModule } from '@angular/common/http';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
-    ContactPage,
     HomePage,
     TabsPage,
+    KartaPage,
+    HändelserPage
   ],
   providers: [
     StatusBar,
