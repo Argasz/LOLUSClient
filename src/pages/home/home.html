@@ -16,8 +16,8 @@
   </p>
 
   <ion-list>
-      <ion-item *ngFor="let post of posts">
-          <img [src]="post.data.url" />
+      <ion-item>
+          <p>{{posts?.name}}, {{posts?.age}}, {{posts?.gender}}
       </ion-item>
   </ion-list>
 </ion-content>
