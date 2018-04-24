@@ -11,7 +11,7 @@ and Angular DI.
 export class RestProvider {
 
     private apiUrl = 'http://localhost:8080';
-    private data: any;
+    data: any;
 
     constructor(public http: HttpClient) {
         //console.log('Hello RestServiceProvider Provider');
