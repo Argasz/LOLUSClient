@@ -13,6 +13,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestProvider } from '../providers/rest/rest';
 
+import { GoogleMapComponent } from '../components/google-map/google-map';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { RestProvider } from '../providers/rest/rest';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    GoogleMapComponent
   ],
   imports: [
     BrowserModule,
@@ -38,8 +40,8 @@ import { RestProvider } from '../providers/rest/rest';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
     RestProvider,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
 export class AppModule {}

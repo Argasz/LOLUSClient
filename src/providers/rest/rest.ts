@@ -10,7 +10,7 @@ and Angular DI.
 @Injectable()
 export class RestProvider {
 
-    private apiUrl = 'https://pvt.dsv.su.se/Group07';
+    private apiUrl = 'http://localhost:8080';
     private data: any;
 
     constructor(public http: HttpClient) {
