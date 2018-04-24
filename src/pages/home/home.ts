@@ -10,8 +10,10 @@ import {TabsPage} from "../tabs/tabs";
 export class HomePage {
 
     posts: any;
+    myNav: NavController;
 
   constructor(public navCtrl: NavController, public rest: RestProvider) {
+    this.myNav = navCtrl;
       this.getJens();
   }
 
@@ -22,5 +24,9 @@ export class HomePage {
               console.log(this.posts);
           }
       )
+  }
+
+  clickEvent(e){
+    this.myNav.push(TabsPage);
   }
 }
