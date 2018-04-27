@@ -1,6 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { google } from 'google-maps';
-
 
 @Component({
   selector: 'google-map',
@@ -10,7 +8,7 @@ import { google } from 'google-maps';
 export class GoogleMapComponent {
 
     @ViewChild("map") mapElement;
-     map: google.maps.Map;
+     map: any;
 
   constructor() {
 
@@ -22,6 +20,7 @@ export class GoogleMapComponent {
   }
 
   initMap() {
+
       let coords = new google.maps.LatLng(59.329357,18.068644);
       let mapOptions: google.maps.MapOptions = {
           center: coords,
