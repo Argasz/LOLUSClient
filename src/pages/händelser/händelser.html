@@ -14,20 +14,16 @@
 
 
 <ion-content padding>
-
+<ion-refresher (ionRefresh)="doRefresh($event)">
+  <ion-refresher-content>
+  </ion-refresher-content>
+</ion-refresher>
+  <!--Ska förmodligen inte uppdateras på detta sätt men ville ha något till att testa -->
+<h4>Dra nedåt för att uppdatera!</h4>
   <ion-list>
-    <ion-item>
-      Händelse1
-    </ion-item>
-    <ion-item>
-      Händelse2
-    </ion-item>
-    <ion-item>
-      Händelse3
-    </ion-item>
-    <ion-item>
-      Händelse4
+    <ion-item  *ngFor = "let event of events">
+      Time: {{event?.time}}
+      Location: {{event?.location}}
     </ion-item>
   </ion-list>
-
 </ion-content>
