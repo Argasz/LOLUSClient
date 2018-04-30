@@ -22,4 +22,5 @@ export class KartaPage {
     console.log('ionViewDidLoad KartaPage');
   }
 
+
 }

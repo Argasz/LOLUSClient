@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { RestProvider } from "../../providers/rest/rest";
+import { RestProvider } from '../../providers/rest/rest';
+import { Events } from 'ionic-angular';
 
 /**
  * Generated class for the HändelserPage page.
@@ -15,9 +16,10 @@ import { RestProvider } from "../../providers/rest/rest";
   templateUrl: 'händelser.html',
 })
 export class HändelserPage {
-  events: any;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public rest: RestProvider) {
+  ev: JSON;
+  events: Events;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public rest: RestProvider, public event: Events) {
+    this.events = event;
     this.getEvents();
   }
 
@@ -26,17 +28,20 @@ export class HändelserPage {
   }
 
   getEvents() {
-    this.rest.getAllEvents().then(
+    this.rest.getAllEvents().subscribe(
       data => {
-        this.events = data;
+        this.ev = data;
+        for (let eventsKey in this.ev) {
+            let obj = this.ev[eventsKey];
+            this.events.publish('event:created',obj.time, obj.lat, obj.lng);
+        }
       }
     )
   }
 
   doRefresh(refresher){
-
     this.getEvents();
-    console.log("Done")
+    console.log("Done");
     refresher.complete();
   }
 

@@ -14,7 +14,7 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public rest: RestProvider) {
     this.myNav = navCtrl;
-      this.getJens();
+    this.getJens();
   }
 
   getJens() {

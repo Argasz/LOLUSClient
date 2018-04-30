@@ -21,9 +21,9 @@
   <!--Ska förmodligen inte uppdateras på detta sätt men ville ha något till att testa -->
 <h4>Dra nedåt för att uppdatera!</h4>
   <ion-list>
-    <ion-item  *ngFor = "let event of events">
+    <ion-item  *ngFor = "let event of ev">
       Time: {{event?.time}}
-      Location: {{event?.location}}
+      Location: {{event?.lat}}, {{event?.lng}}
     </ion-item>
   </ion-list>
 </ion-content>

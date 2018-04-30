@@ -10,7 +10,7 @@ and Angular DI.
 @Injectable()
 export class RestProvider {
 
-    private apiUrl = 'https://pvt.dsv.su.se/Group07';
+    private apiUrl = 'http://localhost:8080';
 
     constructor(public http: HttpClient) {
         //console.log('Hello RestServiceProvider Provider');
@@ -27,12 +27,6 @@ export class RestProvider {
     }
 
     getAllEvents() {
-      return new Promise(resolve => {
-        this.http.get(this.apiUrl + '/getAllEvents').subscribe(data => {
-          resolve(data);
-        }, error =>{
-          console.log(error);
-        })
-      })
+        return this.http.get<JSON>(this.apiUrl + '/getAllEvents')
     }
 }
