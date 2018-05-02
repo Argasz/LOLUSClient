@@ -1,0 +1,44 @@
+<ion-header>
+
+
+</ion-header>
+
+<ion-content padding class="bg-style">
+<ion-slides pager>
+	<ion-slide>
+		<div id="container">
+				<h1>Välkommen</h1>
+				<p id="infotext">Nu är det enklare än någonsin att upptäcka och rapportera faror i din närhet.</p>
+				<img src="../../assets/imgs/welcome1.png"/>
+				<div class="btn-toolbar">
+					<button ion-button id="skip" color="light" (click)="skipIntro($event)">Hoppa över</button>
+					<div class="divider"></div>
+					<div class="divider"></div>
+					<button ion-button id="next" color="light" (click)="nextSlide($event)">Nästa</button>
+				</div>
+		</div>
+	</ion-slide>
+	<ion-slide>
+		<h1>Hjälp till</h1>
+			<p id="infotext">Du kan själv hjälpa till att rapportera in händelser för att upplysa din omgivning om vilka faror som finns.</p>
+			<img src="../../assets/imgs/welcome2.png"/>
+			<div class="btn-toolbar">
+				<button ion-button id="skip" color="light" (click)="skipIntro($event)">Hoppa över</button>
+				<div class="divider"></div>
+				<div class="divider"></div>
+				<button ion-button id="next" color="light" (click)="nextSlide($event)">Nästa</button>
+			</div>
+	</ion-slide>
+	<ion-slide>
+		<h1>Ersätter inte 112</h1>
+			<p id="infotext">Trygghetslarm i Stockholm ersätter inte 112. Är du eller någon annan i direkt fara ska du ringa 112.</p>
+			<img src="../../assets/imgs/welcome3.png"/>
+			<div class="btn-toolbar">
+				<button ion-button id="skip" color="light" (click)="skipIntro($event)">Hoppa över</button>
+				<div class="divider"></div>
+				<div class="divider"></div>
+				<button ion-button id="done" color="light" (click)="endIntro($event)">Klar</button>
+			</div>
+	</ion-slide>
+</ion-slides>
+</ion-content>

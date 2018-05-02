@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
 import {TabsPage} from "../tabs/tabs";
+import {WelcomePage} from "../welcome/welcome";
 
 @Component({
   selector: 'page-home',
@@ -27,6 +28,6 @@ export class HomePage {
   }
 
   clickEvent(e){
-    this.myNav.push(TabsPage);
+    this.myNav.push(WelcomePage);
   }
 }
