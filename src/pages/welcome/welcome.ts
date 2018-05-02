@@ -32,7 +32,7 @@ export class WelcomePage {
   }
   
   skipIntro() {
-	
+	this.myNav.push(TabsPage);
   }
   
   endIntro() {
