@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import {TabsPage} from "../tabs/tabs";
 import { google } from "google-maps";
@@ -25,10 +25,21 @@ export class WelcomePage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad WelcomePage');
   }
-
+  
+  slideChanged(){
+	let curr = this.slides.getActiveIndex();
+	let element = document.getElementById('next');
+	if(curr == 2){
+		element.textContent = 'Klar';
+	}
+  }
 
   nextSlide() {
-	this.slides.slideNext();
+	if(this.slides.isEnd()){
+		this.myNav.push(TabsPage);
+	} else {
+		this.slides.slideNext();
+	}
   }
   
   skipIntro() {
