@@ -11,6 +11,7 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { KartaPage } from "../pages/karta/karta";
 import { HändelserPage } from "../pages/händelser/händelser";
+import { SettingsPage } from "../pages/settings/settings";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -27,7 +28,8 @@ import { GoogleMapComponent } from '../components/google-map/google-map';
     TabsPage,
     GoogleMapComponent,
     KartaPage,
-    HändelserPage
+    HändelserPage,
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ import { GoogleMapComponent } from '../components/google-map/google-map';
     HomePage,
     TabsPage,
     KartaPage,
-    HändelserPage
+    HändelserPage,
+    SettingsPage
   ],
   providers: [
     StatusBar,
