@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RestProvider } from "../providers/rest/rest";
 import { GoogleMapComponent } from '../components/google-map/google-map';
 import { Geolocation } from '@ionic-native/geolocation';
+import {HmodalComponent} from "../components/hmodal/hmodal";
 
 
 
@@ -28,7 +29,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     TabsPage,
     KartaPage,
     HändelserPage,
-    GoogleMapComponent
+    GoogleMapComponent,
+    HmodalComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     HomePage,
     TabsPage,
     KartaPage,
-    HändelserPage
+    HändelserPage,
+    HmodalComponent
   ],
   providers: [
     StatusBar,

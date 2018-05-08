@@ -13,20 +13,24 @@ export class GoogleMapComponent {
 
     @ViewChild("map") mapElement;
      map: any;
-     event: Events;
 
   constructor(private platform: Platform, private geolocation: Geolocation, public events: Events) {
-    this.event = events;
+    let ready = false;
     platform.ready().then(() => {
       geolocation.getCurrentPosition().then( pos=>{
         this.initMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
         }
         )
       }
-    )
+    );
     events.subscribe('event:created', (time, lat, lng) => {
-      this.setMarker(new google.maps.LatLng(lat, lng), time);
-    })
+        let latLng = new google.maps.LatLng(lat, lng);
+        this.setMarker(latLng, time);
+    });
+    events.subscribe('modal:open', (lat, lng) => {
+      let latLng = new google.maps.LatLng(lat, lng);
+      this.map.panTo(latLng);
+    });
   }
 
   initMap(latLng: google.maps.LatLng) {
@@ -52,5 +56,6 @@ export class GoogleMapComponent {
     let marker = new google.maps.Marker({position: latLng, title: time});
     marker.setMap(this.map);
   }
+
 
 }
