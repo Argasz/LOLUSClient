@@ -1,0 +1,63 @@
+<ion-header>
+
+
+</ion-header>
+
+<ion-content padding class="bg-style">
+<ion-slides pager>
+	<ion-slide>
+		<ion-grid>
+			<ion-row>
+				<ion-col>
+				<h1>Välkommen</h1>
+				<p id="infotext">Nu är det enklare än någonsin att upptäcka och rapportera faror i din närhet.</p>
+				</ion-col>
+			</ion-row>
+			<ion-row>
+				<ion-col>
+					<img src="../../assets/imgs/welcome1.png"/>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</ion-slide>
+	
+	<ion-slide>
+		<ion-grid>
+			<ion-row>
+				<ion-col>
+					<h1>Hjälp till</h1>
+					<p id="infotext">Du kan själv hjälpa till att rapportera in händelser för att upplysa din omgivning om vilka faror som finns.</p>
+					<img src="../../assets/imgs/welcome2.png"/>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</ion-slide>
+	
+	<ion-slide>
+		<ion-grid>
+			<ion-row>
+				<ion-col>
+					<h1>Ersätter inte 112</h1>
+					<p id="infotext">Trygghetslarm i Stockholm ersätter inte 112. Är du eller någon annan i direkt fara ska du ringa 112.</p>
+					<img src="../../assets/imgs/welcome3.png"/>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</ion-slide>
+</ion-slides>
+</ion-content>
+<ion-footer>
+	<ion-grid>
+		<ion-row>
+			<ion-col>
+				<button ion-button id="skip" color="light" (click)="skipIntro($event)">Hoppa över</button>
+			</ion-col>
+			<ion-col>
+			 
+			</ion-col>
+			<ion-col>
+				<button ion-button id="next" color="light" (click)="nextSlide($event)">Nästa</button>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ion-footer>

@@ -1,12 +1,35 @@
 page-home {
 
   h2 {
-    color: #0b486b;
+    color: #ffffff;
     text-align: center;
   }
+
+  ion-content {
+     //background: color($colors, primary) !important;
+ }
+
   ion-input {
     background-color: white;
     border-radius: 10px;
   }
+
+  .button {
+     border-radius: 25px;
+     background-color: color($colors, light);
+     color: color($colors, primary);
+ }
+
+ #login.button {
+    background-color: color($colors, orange);
+    color: color($colors, light);
 }
 
+ .grid {
+   padding-top: 50px;
+}
+
+ .colu {
+   text-align: center;
+ }
+}
