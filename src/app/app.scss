@@ -15,8 +15,9 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 ion-content {
-p {
-  color: white;
+  p {
+    color: white;
+  }
   //@include linear-gradient(left, $green-beach);
   background: color($colors, primary) !important;
   //webkit-background-size: cover;
