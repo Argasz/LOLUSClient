@@ -14,20 +14,14 @@
 
 
 <ion-content padding>
-
   <ion-list>
-    <ion-item>
-      Händelse1
-    </ion-item>
-    <ion-item>
-      Händelse2
-    </ion-item>
-    <ion-item>
-      Händelse3
-    </ion-item>
-    <ion-item>
-      Händelse4
+    <ion-item  *ngFor = "let event of ev">
+      <h3>{{events?.placeName}}</h3>
+      <p>Tid: {{event?.time}}</p>
+      <p>Plats: {{event?.lat}}, {{event?.lng}}</p>
+      <button ion-button icon-only item-end clear (click) ="presentModal(event?.time, event?.lat, event?.lng)">
+        <ion-icon name="more"></ion-icon>
+      </button>
     </ion-item>
   </ion-list>
-
 </ion-content>

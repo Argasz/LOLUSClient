@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
-import {TabsPage} from "../tabs/tabs";
+import { TabsPage } from "../tabs/tabs";
 
 @Component({
   selector: 'page-home',
@@ -14,7 +14,7 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public rest: RestProvider) {
     this.myNav = navCtrl;
-      this.getJens();
+    this.getJens();
   }
 
   getJens() {
