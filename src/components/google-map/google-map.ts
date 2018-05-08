@@ -15,7 +15,6 @@ export class GoogleMapComponent {
      map: any;
 
   constructor(private platform: Platform, private geolocation: Geolocation, public events: Events) {
-    let ready = false;
     platform.ready().then(() => {
       geolocation.getCurrentPosition().then( pos=>{
         this.initMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));

@@ -29,4 +29,13 @@ export class RestProvider {
     getAllEvents() {
         return this.http.get<JSON>(this.apiUrl + '/getAllEvents')
     }
+
+    getEventsByTime(start: string, end: string) {
+
+    }
+
+    getEventsByLocation(startLat: string, endLat: string, startLng: string, endLng: string){
+      console.log(this.apiUrl + '/getEventsByLocation?startLat='+startLat+'&endLat='+endLat+'&startLng='+startLng+'&endLng='+endLng);
+      return this.http.get<JSON>(this.apiUrl + '/getEventsByLocation?startLat='+startLat+'&endLat='+endLat+'&startLng='+startLng+'&endLng='+endLng);
+    }
 }

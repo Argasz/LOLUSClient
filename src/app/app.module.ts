@@ -49,7 +49,8 @@ import { HmodalComponent } from "../components/hmodal/hmodal";
     HändelserPage,
 	  WelcomePage,
     SettingsPage,
-    HmodalComponent
+    HmodalComponent,
+    GoogleMapComponent,
   ],
   providers: [
     StatusBar,
