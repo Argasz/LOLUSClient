@@ -1,7 +1,5 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
@@ -12,11 +10,16 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { KartaPage } from "../pages/karta/karta";
 import { HändelserPage } from "../pages/händelser/händelser";
 import { WelcomePage } from "../pages/welcome/welcome";
+import { SettingsPage } from "../pages/settings/settings";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-import { RestProvider } from '../providers/rest/rest';
+import { HttpClientModule } from '@angular/common/http';
+import { RestProvider } from "../providers/rest/rest";
 import { GoogleMapComponent } from '../components/google-map/google-map';
+import { Geolocation } from '@ionic-native/geolocation';
+import { HmodalComponent } from "../components/hmodal/hmodal";
+
+
 
 @NgModule({
   declarations: [
@@ -25,16 +28,17 @@ import { GoogleMapComponent } from '../components/google-map/google-map';
     ContactPage,
     HomePage,
     TabsPage,
-    GoogleMapComponent,
     KartaPage,
     HändelserPage,
-	WelcomePage
+	  WelcomePage,
+    SettingsPage,
+    GoogleMapComponent,
+    HmodalComponent
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    HttpClientModule
-
+    HttpClientModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -43,12 +47,15 @@ import { GoogleMapComponent } from '../components/google-map/google-map';
     TabsPage,
     KartaPage,
     HändelserPage,
-	WelcomePage
+	  WelcomePage,
+    SettingsPage,
+    HmodalComponent
   ],
   providers: [
     StatusBar,
     SplashScreen,
     RestProvider,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
