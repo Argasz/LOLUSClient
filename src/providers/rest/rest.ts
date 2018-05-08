@@ -11,7 +11,6 @@ and Angular DI.
 export class RestProvider {
 
     private apiUrl = 'http://localhost:8080';
-    data: any;
 
     constructor(public http: HttpClient) {
         //console.log('Hello RestServiceProvider Provider');
@@ -27,4 +26,7 @@ export class RestProvider {
         });
     }
 
+    getAllEvents() {
+        return this.http.get<JSON>(this.apiUrl + '/getAllEvents')
+    }
 }
