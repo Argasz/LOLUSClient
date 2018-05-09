@@ -21,11 +21,12 @@ import { Geolocation } from '@ionic-native/geolocation'
   templateUrl: 'händelser.html',
 })
 export class HändelserPage {
-  ev: JSON;
+  ev: Array<Object>;
   events: Events;
   rest: RestProvider;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events, public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
+              public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform) {
     this.events = event;
     this.rest  = rests;
     setInterval(() => { //Uppdatera händelselista var 10:e sekund
@@ -45,6 +46,7 @@ export class HändelserPage {
     let endLat;
     let startLng;
     let endLng;
+    let date: Date;
     this.platform.ready().then(() => {
       this.geolocation.getCurrentPosition().then(pos => {
         lat = pos.coords.latitude;
@@ -56,11 +58,14 @@ export class HändelserPage {
 
         this.rest.getEventsByLocation(startLat.toString(), endLat.toString(),startLng.toString(),endLng.toString()).subscribe(
           data => {
-            this.ev = data;
-            for (let eventsKey in this.ev) {
-              let obj = this.ev[eventsKey];
+            this.ev = new Array<Object>(); //TODO: ändra hur uppdateringen sker.
+            for (let eventsKey in data) {
+              let obj = data[eventsKey];
+              date = new Date(Date.parse(obj.time));
+              let o = {'lat':obj.lat, 'lng':obj.lng, 'date':date.toLocaleDateString(), 'time': date.toLocaleTimeString()};
+              this.ev.push(o);
               //this.ev[eventsKey].placeName = this.revGeoCode(new google.maps.LatLng(obj.lat, obj.lng)); behövs licens?
-              this.events.publish('event:created',obj.time, obj.lat, obj.lng);
+              this.events.publish('event:created',o.date, o.time , obj.lat, obj.lng);
             }
           }
         )
@@ -73,7 +78,7 @@ export class HändelserPage {
   }
 
   presentModal(title: string, lat: string, lng: string) {
-    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng});
+    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng}); //TODO: Fixa modaldisplay för nytt stringformat
     hModal.present();
   }
   /*revGeoCode(latLng: google.maps.LatLng){

@@ -20,7 +20,6 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { HmodalComponent } from "../components/hmodal/hmodal";
 
 
-
 @NgModule({
   declarations: [
     MyApp,

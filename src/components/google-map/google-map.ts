@@ -22,9 +22,9 @@ export class GoogleMapComponent {
         )
       }
     );
-    events.subscribe('event:created', (time, lat, lng) => {
+    events.subscribe('event:created', (time, clock, lat, lng) => {
         let latLng = new google.maps.LatLng(lat, lng);
-        this.setMarker(latLng, time);
+        this.setMarker(latLng, 'Time: ' + clock + 'Date: ' + time );
     });
     events.subscribe('modal:open', (lat, lng) => {
       let latLng = new google.maps.LatLng(lat, lng);
@@ -40,6 +40,7 @@ export class GoogleMapComponent {
           mapTypeId: google.maps.MapTypeId.ROADMAP
       }
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions)
+      this.events.publish('map:init');
   }
 
   getMarker() {

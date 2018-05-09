@@ -26,9 +26,9 @@ export class HmodalComponent {
   }
 
   ionViewDidLoad(){
-    setTimeout(()=>{
-      this.event.publish('modal:open', this.lat, this.lng ); //TODO: Ska reagera på att karta är laddad,
-    }, 2000)
+    this.event.subscribe('map:init', ()=>{
+      this.event.publish('modal:open', this.lat, this.lng );
+    });
 
   }
 }
