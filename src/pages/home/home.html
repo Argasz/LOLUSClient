@@ -6,17 +6,10 @@
 
 <ion-content padding>
   <h2>LOLUS</h2>
-
-  <ion-list>
-      <ion-item>
-          <p>{{posts?.name}}, {{posts?.age}}, {{posts?.gender}}
-      </ion-item>
-  </ion-list>
-
 <ion-grid class="grid">
    <ion-row>
      <ion-col class="colu">
-        <button ion-button id="login" class="bttn" (click)="clickEvent($event)">LOGGA IN MED FACEBOOK</button>
+        <button ion-button id="login" class="bttn" (click)="signInWithFacebook()">LOGGA IN MED FACEBOOK</button>
      </ion-col>
    </ion-row>
   <ion-row>

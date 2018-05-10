@@ -19,7 +19,17 @@ import { GoogleMapComponent } from '../components/google-map/google-map';
 import { Geolocation } from '@ionic-native/geolocation';
 import { HmodalComponent } from "../components/hmodal/hmodal";
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
+export const firebaseConfig = {
+    apiKey: "AIzaSyDCBpUvRzqrAA5rtpvKsQWgXUt22RiDqr4",
+    authDomain: "lolus-201915.firebaseapp.com",
+    databaseURL: "https://lolus-201915.firebaseio.com",
+    projectId: "lolus-201915",
+    storageBucket: "lolus-201915.appspot.com",
+    messagingSenderId: "1063142852475"
+};
 
 @NgModule({
   declarations: [
@@ -30,7 +40,7 @@ import { HmodalComponent } from "../components/hmodal/hmodal";
     TabsPage,
     KartaPage,
     HändelserPage,
-	  WelcomePage,
+	WelcomePage,
     SettingsPage,
     GoogleMapComponent,
     HmodalComponent
@@ -39,6 +49,8 @@ import { HmodalComponent } from "../components/hmodal/hmodal";
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
