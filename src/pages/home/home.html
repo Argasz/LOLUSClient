@@ -1,21 +1,40 @@
 <ion-header>
-  <ion-navbar hideBackButton="true">
-    <ion-title>Login</ion-title>
-  </ion-navbar>
+    <ion-navbar hideBackButton="true">
+        <ion-title>Login</ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>LOLUS</h2>
-<ion-grid class="grid">
-   <ion-row>
-     <ion-col class="colu">
-        <button ion-button id="login" class="bttn" (click)="signInWithFacebook()">LOGGA IN MED FACEBOOK</button>
-     </ion-col>
-   </ion-row>
-  <ion-row>
-    <ion-col class="colu">
-        <button ion-button class="bttn" (click)="clickEvent($event)">REGISTRERA MED FACEBOOK</button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+    <h2>LOLUS</h2>
+    <ion-grid class="grid">
+
+<ion-input id="email" class="login-form"></ion-input>
+<ion-input id="password" class="login-form"></ion-input>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button id="login" class="login bttn" (click)="clickEvent(e)">LOGIN</button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button id="fb-login" class="login bttn fb-login" (click)="signInWithFacebook()">LOGGA IN MED FACEBOOK</button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button id="google-login" class="login bttn google-login" (click)="signInWithGoogle()">LOGGA IN MED GOOGLE</button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button class="register" (click)="clickEvent($event)">REGISTRERA MED FACEBOOK</button>
+            </ion-col>
+        </ion-row>
+
+
+    </ion-grid>
 </ion-content>
