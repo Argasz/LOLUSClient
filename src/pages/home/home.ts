@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { RestProvider } from '../../providers/rest/rest';
 import { TabsPage } from "../tabs/tabs";
 import { WelcomePage } from "../welcome/welcome";
+
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'page-home',
@@ -13,18 +15,18 @@ export class HomePage {
     posts: any;
     myNav: NavController;
 
-  constructor(public navCtrl: NavController, public rest: RestProvider) {
+  constructor(public navCtrl: NavController, private afAuth: AngularFireAuth) {
     this.myNav = navCtrl;
-    this.getJens();
   }
 
-  getJens() {
-      this.rest.getJens().then(
-          data => {
-              this.posts = data;
-              console.log(this.posts);
-          }
-      )
+  signInWithFacebook() {
+      this.afAuth.auth
+      .signInWithPopup(new firebase.auth.FacebookAuthProvider())
+      .then(res => console.log(res));
+  }
+
+  signOut() {
+    this.afAuth.auth.signOut();
   }
 
   clickEvent(e){
