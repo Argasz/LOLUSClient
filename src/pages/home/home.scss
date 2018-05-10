@@ -1,35 +1,40 @@
 page-home {
 
-  h2 {
-    color: #ffffff;
-    text-align: center;
-  }
+    h2 {
+        color: #ffffff;
+        text-align: center;
+    }
 
-  ion-content {
-     //background: color($colors, primary) !important;
- }
+    ion-content {
+        //background: color($colors, primary) !important;
+    }
 
-  ion-input {
-    background-color: white;
-    border-radius: 10px;
-  }
+    ion-input {
+        background-color: white;
+        border-radius: 10px;
+    }
 
-  .button {
-     border-radius: 25px;
-     background-color: color($colors, light);
-     color: color($colors, primary);
- }
+    .button {
+        border-radius: 25px;
+        background-color: color($colors, light);
+        color: color($colors, primary);
+    }
 
- #login.button {
-    background-color: color($colors, orange);
-    color: color($colors, light);
-}
+    .login {
+        background-color: color($colors, orange);
+        color: color($colors, light);
+        width: 100%;
+    }
 
- .grid {
-   padding-top: 50px;
-}
+    .login-form {
+        margin: 5px 0;
+    }
 
- .colu {
-   text-align: center;
- }
+    .grid {
+        padding-top: 50px;
+    }
+
+    .colu {
+        text-align: center;
+    }
 }
