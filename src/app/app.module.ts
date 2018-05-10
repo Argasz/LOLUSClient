@@ -18,6 +18,7 @@ import { RestProvider } from "../providers/rest/rest";
 import { GoogleMapComponent } from '../components/google-map/google-map';
 import { Geolocation } from '@ionic-native/geolocation';
 import { HmodalComponent } from "../components/hmodal/hmodal";
+import { NotificationsettingsPage } from "../pages/notificationsettings/notificationsettings";
 
 
 
@@ -33,7 +34,8 @@ import { HmodalComponent } from "../components/hmodal/hmodal";
 	  WelcomePage,
     SettingsPage,
     GoogleMapComponent,
-    HmodalComponent
+    HmodalComponent,
+	NotificationsettingsPage
   ],
   imports: [
     BrowserModule,
@@ -49,7 +51,8 @@ import { HmodalComponent } from "../components/hmodal/hmodal";
     HändelserPage,
 	  WelcomePage,
     SettingsPage,
-    HmodalComponent
+    HmodalComponent,
+	NotificationsettingsPage
   ],
   providers: [
     StatusBar,
