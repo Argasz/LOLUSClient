@@ -18,16 +18,18 @@ export class HmodalComponent {
   lat: string;
   time: string;
   event: any;
+  title: string;
   constructor(params: NavParams, events: Events) {
     this.lat = params.get('lat')
     this.lng = params.get('lng')
-    this.time = params.get('title');
+    this.title = params.get('title');
+    this.time = params.get('time');
     this.event = events;
   }
 
   ionViewDidLoad(){
     this.event.subscribe('map:init', ()=>{
-      this.event.publish('modal:open', this.lat, this.lng );
+      this.event.publish('modal:open', this.lat, this.lng ); //TODO: zooma tillbaka onclose
     });
 
   }

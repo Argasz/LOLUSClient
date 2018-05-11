@@ -51,10 +51,10 @@ export class HändelserPage {
       this.geolocation.getCurrentPosition().then(pos => {
         lat = pos.coords.latitude;
         lng = pos.coords.longitude;
-        startLat = lat-5;
-        endLat = lat+5;
-        startLng = lng-5; //TODO: Bind detta till settings-slider
-        endLng = lng+5;
+        startLat = lat-0.5;
+        endLat = lat+0.5;
+        startLng = lng-0.5; //TODO: Bind detta till settings-slider
+        endLng = lng+0.5;
 
         this.rest.getEventsByLocation(startLat.toString(), endLat.toString(),startLng.toString(),endLng.toString()).subscribe(
           data => {
@@ -62,10 +62,14 @@ export class HändelserPage {
             for (let eventsKey in data) {
               let obj = data[eventsKey];
               date = new Date(Date.parse(obj.time));
-              let o = {'lat':obj.lat, 'lng':obj.lng, 'date':date.toLocaleDateString(), 'time': date.toLocaleTimeString()};
-              this.ev.push(o);
-              //this.ev[eventsKey].placeName = this.revGeoCode(new google.maps.LatLng(obj.lat, obj.lng)); behövs licens?
-              this.events.publish('event:created',o.date, o.time , obj.lat, obj.lng);
+              this.rest.reverseGeo(obj.lat, obj.lng).subscribe(name =>{
+                let nameObject = JSON.parse(JSON.stringify(name));
+                let title = nameObject.address.road +' '+ nameObject.address.suburb;
+                let o = {'title':title,'lat':obj.lat, 'lng':obj.lng, 'date':date.toLocaleDateString(), 'time': date.toLocaleTimeString()};
+                this.ev.push(o);
+                this.events.publish('event:created',o.date, o.time , obj.lat, obj.lng);
+              })
+
             }
           }
         )
@@ -77,8 +81,8 @@ export class HändelserPage {
 
   }
 
-  presentModal(title: string, lat: string, lng: string) {
-    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng}); //TODO: Fixa modaldisplay för nytt stringformat
+  presentModal(title: string, lat: string, lng: string, time: string) {
+    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng,time: time}); //TODO: Fixa modaldisplay för nytt stringformat
     hModal.present();
   }
   /*revGeoCode(latLng: google.maps.LatLng){

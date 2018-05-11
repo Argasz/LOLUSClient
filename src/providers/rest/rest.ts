@@ -11,6 +11,7 @@ and Angular DI.
 export class RestProvider {
 
     private apiUrl = 'http://localhost:8080';
+    private geoApiKey = '92e6a7c5bbd4df';
 
     constructor(public http: HttpClient) {
         //console.log('Hello RestServiceProvider Provider');
@@ -37,5 +38,9 @@ export class RestProvider {
     getEventsByLocation(startLat: string, endLat: string, startLng: string, endLng: string){
       console.log(this.apiUrl + '/getEventsByLocation?startLat='+startLat+'&endLat='+endLat+'&startLng='+startLng+'&endLng='+endLng);
       return this.http.get<JSON>(this.apiUrl + '/getEventsByLocation?startLat='+startLat+'&endLat='+endLat+'&startLng='+startLng+'&endLng='+endLng);
+    }
+
+    reverseGeo(lat: string, lng: string){
+      return this.http.get<JSON>('https://eu1.locationiq.org/v1/reverse.php?key='+this.geoApiKey+'&lat='+lat+'&lon='+lng+'&format=json');
     }
 }
