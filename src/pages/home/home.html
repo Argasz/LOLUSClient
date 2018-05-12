@@ -8,8 +8,8 @@
     <h2>LOLUS</h2>
     <ion-grid class="grid">
 
-<ion-input id="email" class="login-form"></ion-input>
-<ion-input id="password" class="login-form"></ion-input>
+<ion-input id="email" class="login-form" type="text" value="E-mail" onfocus="if(this.value === 'E-mail') this.value = '';" onfocusout="if(this.value === '') this.value = 'E-mail';"></ion-input>
+<ion-input id="password" class="login-form" type="password" value="Lösenord" onfocus="if(this.value === 'Lösenord') this.value = '';" onfocusout="if(this.value === '') this.value = 'Lösenord';"></ion-input>
 
         <ion-row>
             <ion-col class="colu">
