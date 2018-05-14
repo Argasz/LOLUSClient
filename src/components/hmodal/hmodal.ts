@@ -21,8 +21,8 @@ export class HmodalComponent {
   title: string;
   viewCtrl: ViewController;
   constructor(params: NavParams, events: Events, viewCtrl: ViewController) {
-    this.lat = params.get('lat')
-    this.lng = params.get('lng')
+    this.lat = params.get('lat');
+    this.lng = params.get('lng');
     this.title = params.get('title');
     this.time = params.get('time');
     this.event = events;
@@ -31,7 +31,7 @@ export class HmodalComponent {
 
   ionViewDidLoad(){
     this.event.subscribe('map:init', ()=>{
-      this.event.publish('modal:open', this.lat, this.lng, this.title); 
+      this.event.publish('modal:open', this.lat, this.lng, this.title);
     });
 
   }
