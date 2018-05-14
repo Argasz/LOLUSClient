@@ -55,6 +55,15 @@ $tabs-ios-background: color($colors, primary);
 $tabs-ios-tab-icon-color: color($colors, semi-light);
 $tabs-ios-tab-color-inactive: color($colors, semi-light);
 $tabs-ios-tab-color-active: color($colors, light);
+
+//togglebar
+$toggle-ios-background-color-on: color($colors, orange);
+
+//range-styling
+$range-ios-padding-vertical: 1px;
+$range-ios-padding-horizontal: 5px;
+$range-ios-tick-height: 20px;
+$range-ios-tick-width: 2px;
 // iOS only Sass variables can go here
 
 
@@ -69,6 +78,17 @@ $tabs-md-background: color($colors, primary);
 $tabs-md-tab-icon-color: color($colors, semi-light);
 $tabs-md-tab-color-inactive: color($colors, semi-light);
 $tabs-md-tab-color-active: color($colors, light);
+
+//togglebar
+$toggle-md-active-color: color($colors, orange);
+
+//range-styling
+$range-md-padding-vertical: 1px;
+$range-md-tick-background-color: #bdbdbd;
+$range-md-tick-active-background-color: color($colors, orange);
+$range-md-tick-height: 20px;
+$range-md-knob-width: 25px;
+
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
