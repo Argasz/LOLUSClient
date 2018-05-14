@@ -15,7 +15,6 @@ export class GoogleMapComponent {
      map: any;
 
   constructor(private platform: Platform, private geolocation: Geolocation, public events: Events) {
-    let ready = false;
     platform.ready().then(() => {
       geolocation.getCurrentPosition().then( pos=>{
         this.initMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
@@ -23,13 +22,20 @@ export class GoogleMapComponent {
         )
       }
     );
-    events.subscribe('event:created', (time, lat, lng) => {
+    events.subscribe('event:created', (title, time, clock, lat, lng) => {
         let latLng = new google.maps.LatLng(lat, lng);
-        this.setMarker(latLng, time);
+        this.setMarker(latLng, title +'\nTid: ' + clock + ' Datum: ' + time );
     });
-    events.subscribe('modal:open', (lat, lng) => {
+    events.subscribe('modal:open', (lat, lng, title) => {
       let latLng = new google.maps.LatLng(lat, lng);
+      this.setMarker(latLng, title);
       this.map.panTo(latLng);
+    });
+
+    events.subscribe('modal:close', ()=>{
+      geolocation.getCurrentPosition().then(pos=>{
+        this.map.panTo(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+      })
     });
   }
 
@@ -41,6 +47,7 @@ export class GoogleMapComponent {
           mapTypeId: google.maps.MapTypeId.ROADMAP
       }
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions)
+      this.events.publish('map:init');
   }
 
   getMarker() {
@@ -52,8 +59,8 @@ export class GoogleMapComponent {
       lamp2.setMap(this.map);
   }
 
-  setMarker(latLng: google.maps.LatLng, time: string){
-    let marker = new google.maps.Marker({position: latLng, title: time});
+  setMarker(latLng: google.maps.LatLng, title: string){
+    let marker = new google.maps.Marker({position: latLng, title: title});
     marker.setMap(this.map);
   }
 

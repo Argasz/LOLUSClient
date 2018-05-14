@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
 import { Events } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
+import { Geolocation } from '@ionic-native/geolocation'
+import {_} from 'underscore'
 
 //import { google } from 'google-maps';
 
@@ -20,13 +22,15 @@ import { HmodalComponent} from "../../components/hmodal/hmodal";
   templateUrl: 'händelser.html',
 })
 export class HändelserPage {
-  ev: JSON;
+  ev: Array<object>;
   events: Events;
   rest: RestProvider;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events, public modCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
+              public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform) {
     this.events = event;
     this.rest  = rests;
+    this.ev = new Array<object>(); //
     setInterval(() => { //Uppdatera händelselista var 10:e sekund
       this.getEvents();
       }, 10000);
@@ -38,21 +42,58 @@ export class HändelserPage {
   }
 
   getEvents() {
-    this.rest.getAllEvents().subscribe(
-      data => {
-        this.ev = data;
-        for (let eventsKey in this.ev) {
-            let obj = this.ev[eventsKey];
-            //this.ev[eventsKey].placeName = this.revGeoCode(new google.maps.LatLng(obj.lat, obj.lng)); behövs licens?
-            this.events.publish('event:created',obj.time, obj.lat, obj.lng);
-        }
+    let lat: number;
+    let lng: number;
+    let startLat;
+    let endLat;
+    let startLng;
+    let endLng;
+    let date: Date;
+    this.platform.ready().then(() => {
+      this.geolocation.getCurrentPosition().then(pos => {
+        lat = pos.coords.latitude;
+        lng = pos.coords.longitude;
+        startLat = lat-0.5;
+        endLat = lat+0.5;
+        startLng = lng-0.5; //TODO: Bind detta till settings-slider
+        endLng = lng+0.5;
+
+        this.rest.getEventsByLocation(startLat.toString(), endLat.toString(),startLng.toString(),endLng.toString()).subscribe(
+          async (data) => {//TODO: ändra hur uppdateringen sker.
+            for (let eventsKey in data) {
+              let obj = data[eventsKey];
+              date = new Date(Date.parse(obj.time));
+              let found = await _.some(this.ev, function (x){
+                return (x.lat === obj.lat) && (x.lng === obj.lng) && (x.date === date.toLocaleDateString()) && (x.time === date.toLocaleTimeString());
+              });
+              if(!found) {
+                await this.rest.reverseGeo(obj.lat, obj.lng).then(name => {
+                  let nameObject = JSON.parse(JSON.stringify(name));
+                  let title = nameObject.address.road + ' ' + nameObject.address.suburb;
+                  let o = {
+                    'title': title,
+                    'lat': obj.lat,
+                    'lng': obj.lng,
+                    'date': date.toLocaleDateString(),
+                    'time': date.toLocaleTimeString()
+                  };
+                  this.ev.push(o);
+                  this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+                });
+              }
+            }
+          }
+        )
+        console.log("Updated");
+      })
       }
-    )
-    console.log("Updated");
+    );
+
+
   }
 
-  presentModal(title: string, lat: string, lng: string) {
-    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng});
+  presentModal(title: string, lat: string, lng: string, time: string) {
+    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng,time: time}); //TODO: Fixa modaldisplay för nytt stringformat
     hModal.present();
   }
   /*revGeoCode(latLng: google.maps.LatLng){

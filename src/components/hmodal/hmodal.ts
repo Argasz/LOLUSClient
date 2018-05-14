@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavParams, Events} from 'ionic-angular';
+import {NavParams, Events, ViewController} from 'ionic-angular';
 
 
 /**
@@ -18,17 +18,25 @@ export class HmodalComponent {
   lat: string;
   time: string;
   event: any;
-  constructor(params: NavParams, events: Events) {
-    this.lat = params.get('lat')
-    this.lng = params.get('lng')
-    this.time = params.get('title');
+  title: string;
+  viewCtrl: ViewController;
+  constructor(params: NavParams, events: Events, viewCtrl: ViewController) {
+    this.lat = params.get('lat');
+    this.lng = params.get('lng');
+    this.title = params.get('title');
+    this.time = params.get('time');
     this.event = events;
+    this.viewCtrl = viewCtrl;
   }
 
   ionViewDidLoad(){
-    setTimeout(()=>{
-      this.event.publish('modal:open', this.lat, this.lng ); //TODO: Ska reagera på att karta är laddad,
-    }, 2000)
+    this.event.subscribe('map:init', ()=>{
+      this.event.publish('modal:open', this.lat, this.lng, this.title);
+    });
 
+  }
+  dismiss(){
+    this.event.publish('modal:close');
+    this.viewCtrl.dismiss();
   }
 }

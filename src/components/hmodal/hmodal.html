@@ -2,18 +2,21 @@
 <ion-header>
 
   <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">Stäng</button>
+    </ion-buttons>
     <ion-title>
-      {{time}},{{lat}},{{lng}}
-
+      {{title}}
     </ion-title>
   </ion-navbar>
 
 </ion-header>
 
-<ion-content padding>
-  <google-map></google-map>
-
-  <button ion-button color="light" round>Meny</button>
-  <button ion-button color="light" round>Kommentera</button>
+<ion-content>
+    <google-map></google-map>
+  <div class="cen">
+    <button ion-button color="light" round>Meny</button>
+    <button ion-button color="light" round>Kommentera</button>
+  </div>
 </ion-content>
 

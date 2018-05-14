@@ -16,10 +16,11 @@
 <ion-content padding>
   <ion-list>
     <ion-item  *ngFor = "let event of ev">
-      <h3>{{events?.placeName}}</h3>
+      <p>{{event?.title}}</p>
       <p>Tid: {{event?.time}}</p>
+      <p>Datum: {{event?.date}}</p>
       <p>Plats: {{event?.lat}}, {{event?.lng}}</p>
-      <button ion-button icon-only item-end clear (click) ="presentModal(event?.time, event?.lat, event?.lng)">
+      <button ion-button icon-only item-end clear (click) ="presentModal(event?.title, event?.lat, event?.lng, event?.time)">
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-item>
