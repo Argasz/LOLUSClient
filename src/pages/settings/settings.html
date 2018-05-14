@@ -7,12 +7,45 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Settings</ion-title>
+    <ion-title>Inställningar</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+   <ion-list class="list">
+
+      <ion-item no-lines>
+         <ion-avatar class="avatar">
+            <img class="avatar" src="assets/imgs/profpic.jpg">
+         </ion-avatar>
+      </ion-item>
+
+      <h1>Erik Hörnström</h1>
+
+     <ion-item class="notific-item">
+        <ion-label>Notifikationer</ion-label>
+     <ion-toggle [(ngModel)]="pepperoni"></ion-toggle>
+     </ion-item>
+
+      <ion-item>
+         <ion-label class="avstand-label">Avstånd</ion-label>
+         <button class="info-button" item-end>
+            <ion-icon name="information-circle"></ion-icon>
+         </button>
+            <ion-range class="diam-range" min="0" max="10" step="2" pin="true" snaps="true" color="orange" [(ngModel)]="singleValue4">
+            </ion-range>
+      </ion-item>
+
+     <h1 class="om-lolus">
+        Om LOLUS
+     </h1>
+     <p>
+        LOLUS är en applikation skapad av studenter på Stockholms Universitet i samarbete med Stockholm
+        Stad som med stöd av stadens lykstolpar har ambitionen att öka tryggheten för stadens medborgare.
+     </p>
+   </ion-list>
 
 </ion-content>
