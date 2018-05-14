@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavParams, Events} from 'ionic-angular';
+import {NavParams, Events, ViewController} from 'ionic-angular';
 
 
 /**
@@ -19,18 +19,24 @@ export class HmodalComponent {
   time: string;
   event: any;
   title: string;
-  constructor(params: NavParams, events: Events) {
+  viewCtrl: ViewController;
+  constructor(params: NavParams, events: Events, viewCtrl: ViewController) {
     this.lat = params.get('lat')
     this.lng = params.get('lng')
     this.title = params.get('title');
     this.time = params.get('time');
     this.event = events;
+    this.viewCtrl = viewCtrl;
   }
 
   ionViewDidLoad(){
     this.event.subscribe('map:init', ()=>{
-      this.event.publish('modal:open', this.lat, this.lng ); //TODO: zooma tillbaka onclose
+      this.event.publish('modal:open', this.lat, this.lng, this.title); 
     });
 
+  }
+  dismiss(){
+    this.event.publish('modal:close');
+    this.viewCtrl.dismiss();
   }
 }

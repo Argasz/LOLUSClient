@@ -41,6 +41,13 @@ export class RestProvider {
     }
 
     reverseGeo(lat: string, lng: string){
-      return this.http.get<JSON>('https://eu1.locationiq.org/v1/reverse.php?key='+this.geoApiKey+'&lat='+lat+'&lon='+lng+'&format=json');
+      setTimeout(function(){}, 1000)
+      return new Promise(resolve => {
+        this.http.get<JSON>('https://eu1.locationiq.org/v1/reverse.php?key='+this.geoApiKey+'&lat='+lat+'&lon='+lng+'&format=json').subscribe(data => {
+          resolve(data);
+        })
+
+      });
+
     }
 }

@@ -5,6 +5,7 @@ import { Events } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
 import { Geolocation } from '@ionic-native/geolocation'
+import {_} from 'underscore'
 
 //import { google } from 'google-maps';
 
@@ -21,7 +22,7 @@ import { Geolocation } from '@ionic-native/geolocation'
   templateUrl: 'händelser.html',
 })
 export class HändelserPage {
-  ev: Array<Object>;
+  ev: Array<object>;
   events: Events;
   rest: RestProvider;
 
@@ -29,6 +30,7 @@ export class HändelserPage {
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform) {
     this.events = event;
     this.rest  = rests;
+    this.ev = new Array<object>(); //
     setInterval(() => { //Uppdatera händelselista var 10:e sekund
       this.getEvents();
       }, 10000);
@@ -57,19 +59,28 @@ export class HändelserPage {
         endLng = lng+0.5;
 
         this.rest.getEventsByLocation(startLat.toString(), endLat.toString(),startLng.toString(),endLng.toString()).subscribe(
-          data => {
-            this.ev = new Array<Object>(); //TODO: ändra hur uppdateringen sker.
+          async (data) => {//TODO: ändra hur uppdateringen sker.
             for (let eventsKey in data) {
               let obj = data[eventsKey];
               date = new Date(Date.parse(obj.time));
-              this.rest.reverseGeo(obj.lat, obj.lng).subscribe(name =>{
-                let nameObject = JSON.parse(JSON.stringify(name));
-                let title = nameObject.address.road +' '+ nameObject.address.suburb;
-                let o = {'title':title,'lat':obj.lat, 'lng':obj.lng, 'date':date.toLocaleDateString(), 'time': date.toLocaleTimeString()};
-                this.ev.push(o);
-                this.events.publish('event:created',o.date, o.time , obj.lat, obj.lng);
-              })
-
+              let found = await _.some(this.ev, function (x){
+                return (x.lat === obj.lat) && (x.lng === obj.lng) && (x.date === date.toLocaleDateString()) && (x.time === date.toLocaleTimeString());
+              });
+              if(!found) {
+                await this.rest.reverseGeo(obj.lat, obj.lng).then(name => {
+                  let nameObject = JSON.parse(JSON.stringify(name));
+                  let title = nameObject.address.road + ' ' + nameObject.address.suburb;
+                  let o = {
+                    'title': title,
+                    'lat': obj.lat,
+                    'lng': obj.lng,
+                    'date': date.toLocaleDateString(),
+                    'time': date.toLocaleTimeString()
+                  };
+                  this.ev.push(o);
+                  this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+                });
+              }
             }
           }
         )
