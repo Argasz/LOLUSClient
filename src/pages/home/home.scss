@@ -1,35 +1,60 @@
 page-home {
 
-  h2 {
-    color: #ffffff;
+   .icongrid {
+      margin-top: 1px;
+      padding-top: 1px;
+   }
+
+   ion-icon {
+      font-size: 80px;
+      text-align: center;
+   }
+
+   .iconcol {
+      padding-top: 1px;
+      margin-top: 1px;
     text-align: center;
-  }
+   }
 
-  ion-content {
-     //background: color($colors, primary) !important;
- }
+   h1 {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 200;
+      margin-top: 0px;
+      color: color($colors, light);
+      text-align: center;
+   }
 
-  ion-input {
-    background-color: white;
-    border-radius: 10px;
-  }
+    h2 {
+        color: #ffffff;
+        text-align: center;
+    }
 
-  .button {
-     border-radius: 25px;
-     background-color: color($colors, light);
-     color: color($colors, primary);
- }
+    ion-input {
+        background-color: white;
+        border-radius: 10px;
+    }
 
- #login.button {
-    background-color: color($colors, orange);
-    color: color($colors, light);
-}
+    .button {
+        border-radius: 25px;
+        background-color: color($colors, light);
+        color: color($colors, primary);
+    }
 
- .grid {
-   padding-top: 50px;
-}
+    .login {
+        background-color: color($colors, orange);
+        color: color($colors, light);
+        width: 100%;
+    }
 
- .colu {
-   text-align: center;
- }
+    .login-form {
+        margin: 5px 0;
+    }
+
+    .grid {
+        padding-top: 10px;
+    }
+
+    .colu {
+        text-align: center;
+    }
 }

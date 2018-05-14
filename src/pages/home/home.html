@@ -1,28 +1,48 @@
 <ion-header>
-  <ion-navbar hideBackButton="true">
-    <ion-title>Login</ion-title>
-  </ion-navbar>
+    <ion-navbar hideBackButton="true">
+        <ion-title>Login</ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>LOLUS</h2>
+   <ion-grid class="icongrid">
+     <ion-row>
+      <ion-col class="iconcol">
+           <ion-icon name="bulb" color="light"></ion-icon>
+      </ion-col>
+     </ion-row>
+   </ion-grid>
+   <h1>LOLUS</h1>
 
-  <ion-list>
-      <ion-item>
-          <p>{{posts?.name}}, {{posts?.age}}, {{posts?.gender}}
-      </ion-item>
-  </ion-list>
+    <ion-grid class="grid">
 
-<ion-grid class="grid">
-   <ion-row>
-     <ion-col class="colu">
-        <button ion-button id="login" class="bttn" (click)="clickEvent($event)">LOGGA IN MED FACEBOOK</button>
-     </ion-col>
-   </ion-row>
-  <ion-row>
-    <ion-col class="colu">
-        <button ion-button class="bttn" (click)="clickEvent($event)">REGISTRERA MED FACEBOOK</button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+<ion-input id="email" class="login-form" type="text" value="E-mail" onfocus="if(this.value === 'E-mail') this.value = '';" onfocusout="if(this.value === '') this.value = 'E-mail';"></ion-input>
+<ion-input id="password" class="login-form" type="password" value="Lösenord" onfocus="if(this.value === 'Lösenord') this.value = '';" onfocusout="if(this.value === '') this.value = 'Lösenord';"></ion-input>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button id="login" class="login bttn" (click)="clickEvent(e)">LOGIN</button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button id="fb-login" class="login bttn fb-login" (click)="signInWithFacebook()">LOGGA IN MED FACEBOOK</button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button id="google-login" class="login bttn google-login" (click)="signInWithGoogle()">LOGGA IN MED GOOGLE</button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button class="register" (click)="clickEvent($event)">REGISTRERA MED FACEBOOK</button>
+            </ion-col>
+        </ion-row>
+
+
+    </ion-grid>
 </ion-content>
