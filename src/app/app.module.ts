@@ -9,7 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { RegisterPage } from '../pages/register/register';
 import { TabsPage } from '../pages/tabs/tabs';
 import { KartaPage } from "../pages/karta/karta";
-import { HändelserPage } from "../pages/händelser/händelser";
+import { HappeningsPage } from "../pages/happenings/happenings";
 import { WelcomePage } from "../pages/welcome/welcome";
 import { SettingsPage } from "../pages/settings/settings";
 import { StatusBar } from '@ionic-native/status-bar';
@@ -41,7 +41,7 @@ export const firebaseConfig = {
     RegisterPage,
     TabsPage,
     KartaPage,
-    HändelserPage,
+    HappeningsPage,
 	WelcomePage,
     SettingsPage,
     GoogleMapComponent,
@@ -61,7 +61,7 @@ export const firebaseConfig = {
     RegisterPage,
     TabsPage,
     KartaPage,
-    HändelserPage,
+    HappeningsPage,
 	WelcomePage,
     SettingsPage,
     HmodalComponent,
