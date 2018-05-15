@@ -21,6 +21,9 @@ export class HomePage {
         private afAuth: AngularFireAuth
     ) {
         this.myNav = navCtrl;
+        if(firebase.auth().currentUser) {
+            this.signOut();
+        }
     }
 
     signInWithFacebook() {

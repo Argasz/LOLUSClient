@@ -18,10 +18,10 @@ import {_} from 'underscore'
 
 @IonicPage()
 @Component({
-  selector: 'page-händelser',
-  templateUrl: 'händelser.html',
+  selector: 'page-happenings',
+  templateUrl: 'happenings.html',
 })
-export class HändelserPage {
+export class HappeningsPage {
   ev: Array<object>;
   events: Events;
   rest: RestProvider;
