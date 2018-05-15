@@ -1,28 +1,28 @@
 page-home {
 
-   .icongrid {
-      margin-top: 1px;
-      padding-top: 1px;
-   }
+    .icongrid {
+        margin-top: 1px;
+        padding-top: 1px;
+    }
 
-   ion-icon {
-      font-size: 80px;
-      text-align: center;
-   }
+    ion-icon {
+        font-size: 80px;
+        text-align: center;
+    }
 
-   .iconcol {
-      padding-top: 1px;
-      margin-top: 1px;
-    text-align: center;
-   }
+    .iconcol {
+        padding-top: 1px;
+        margin-top: 1px;
+        text-align: center;
+    }
 
-   h1 {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-weight: 200;
-      margin-top: 0px;
-      color: color($colors, light);
-      text-align: center;
-   }
+    h1 {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 200;
+        margin-top: 0px;
+        color: color($colors, light);
+        text-align: center;
+    }
 
     h2 {
         color: #ffffff;
@@ -48,6 +48,7 @@ page-home {
 
     .login-form {
         margin: 5px 0;
+        padding: 5px;
     }
 
     .grid {

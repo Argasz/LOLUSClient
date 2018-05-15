@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import * as firebase from 'firebase/app';
 
 /**
  * Generated class for the SettingsPage page.
@@ -15,7 +16,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SettingsPage {
 
+    user: firebase.User;
+    username: string;
+    photoURL: string;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+      console.log(firebase.auth().currentUser);
+      this.user = firebase.auth().currentUser;
+      this.username = this.user.displayName;
+      this.photoURL = this.user.photoURL;
   }
 
   ionViewDidLoad() {

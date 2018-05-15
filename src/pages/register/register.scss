@@ -1,0 +1,25 @@
+page-register {
+
+    ion-input {
+        background-color: white;
+        border-radius: 10px;
+    }
+    .button {
+        border-radius: 25px;
+        background-color: color($colors, light);
+        color: color($colors, primary);
+    }
+
+    .login {
+        background-color: color($colors, orange);
+        color: color($colors, light);
+        width: 100%;
+    }
+
+    .abort{
+        @extend .login;
+        background-color: color($colors, light);
+        color: color($colors, primary);
+    }
+
+}
