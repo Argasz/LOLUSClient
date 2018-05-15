@@ -10,7 +10,7 @@ and Angular DI.
 @Injectable()
 export class RestProvider {
 
-    private apiUrl = 'http://localhost:8080';
+    private apiUrl = 'http://lolus.eu-west-1.elasticbeanstalk.com';
     private geoApiKey = '92e6a7c5bbd4df';
 
     constructor(public http: HttpClient) {
