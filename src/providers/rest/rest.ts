@@ -10,7 +10,7 @@ and Angular DI.
 @Injectable()
 export class RestProvider {
 
-    private apiUrl = 'http://lolus.eu-west-1.elasticbeanstalk.com';
+    private apiUrl = 'http://localhost:8080';
     private geoApiKey = '92e6a7c5bbd4df';
 
     constructor(public http: HttpClient) {
@@ -41,7 +41,6 @@ export class RestProvider {
     }
 
     reverseGeo(lat: string, lng: string){
-      setTimeout(function(){}, 1000);
       return new Promise(resolve => {
         this.http.get<JSON>('https://eu1.locationiq.org/v1/reverse.php?key='+this.geoApiKey+'&lat='+lat+'&lon='+lng+'&format=json').subscribe(data => {
           resolve(data);
