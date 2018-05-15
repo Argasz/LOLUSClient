@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { WelcomePage } from "../welcome/welcome";
 import { TabsPage } from "../tabs/tabs";
+import { WelcomePage } from "../welcome/welcome";
+import { RegisterPage } from "../register/register";
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
@@ -42,6 +43,10 @@ export class HomePage {
 
     signOut() {
         this.afAuth.auth.signOut();
+    }
+
+    register() {
+        this.myNav.push(RegisterPage);
     }
 
     clickEvent(e){

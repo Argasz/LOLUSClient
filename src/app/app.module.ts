@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
+import { RegisterPage } from '../pages/register/register';
 import { TabsPage } from '../pages/tabs/tabs';
 import { KartaPage } from "../pages/karta/karta";
 import { HändelserPage } from "../pages/händelser/händelser";
@@ -37,6 +38,7 @@ export const firebaseConfig = {
     AboutPage,
     ContactPage,
     HomePage,
+    RegisterPage,
     TabsPage,
     KartaPage,
     HändelserPage,
@@ -56,10 +58,11 @@ export const firebaseConfig = {
   entryComponents: [
     MyApp,
     HomePage,
+    RegisterPage,
     TabsPage,
     KartaPage,
     HändelserPage,
-	  WelcomePage,
+	WelcomePage,
     SettingsPage,
     HmodalComponent,
     GoogleMapComponent,
