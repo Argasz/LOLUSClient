@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { WelcomePage } from "../welcome/welcome";
+import { TabsPage } from "../tabs/tabs";
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
@@ -25,18 +26,18 @@ export class HomePage {
         this.afAuth.auth
         .signInWithPopup(new firebase.auth.FacebookAuthProvider())
         .then(user => {
-            this.user = user
+            this.user = user;
+            this.navCtrl.push(TabsPage)
         });
-        //console.log(this.user//.displayName);
     }
 
     signInWithGoogle() {
         this.afAuth.auth
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then(user => {
-            this.user = user;
+            this.user = user.user;
+            this.navCtrl.push(TabsPage)
         });
-        //console.log(this.user//.displayName);
     }
 
     signOut() {
