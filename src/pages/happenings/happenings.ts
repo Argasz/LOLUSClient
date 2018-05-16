@@ -31,8 +31,9 @@ export class HappeningsPage {
     this.events = event;
     this.rest  = rests;
     this.ev = new Array<object>();
-    this.latFactor = 0.0095;
-    this.lngFactor = 0.11067;
+    this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
+    this.lngFactor = 0.017649; // Samma för longitud baserat på Stockholms latitud
+    this.avstand = 1;
     setInterval(() => { //Uppdatera händelselista var 10:e sekund
       this.getEvents();
       }, 10000);
