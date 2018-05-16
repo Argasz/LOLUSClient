@@ -6,7 +6,6 @@ import { RegisterPage } from "../register/register";
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
-import { GooglePlus } from '@ionic-native/google-plus';
 
 @Component({
     selector: 'page-home',
@@ -20,7 +19,6 @@ export class HomePage {
     constructor(
         public navCtrl: NavController,
         private afAuth: AngularFireAuth,
-        private gplus: GooglePlus
     ) {
         this.myNav = navCtrl;
         if(firebase.auth().currentUser) {
@@ -39,16 +37,11 @@ export class HomePage {
     }
 
     async signInWithGoogle() {
-      const gplusUser = await this.gplus.login({
-        'webClientId': '1063142852475-e9m10q1g2l5o5kn98gavv9h6ebj7fiks.apps.googleusercontent.com',
-        'offline': true,
-        'scopes': 'profile email'
-      })
-        this.afAuth.auth
-        .signInWithCredential(firebase.auth.GoogleAuthProvider.credential(gplusUser.webClientId))
+      this.afAuth.auth
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then(user => {
-            this.user = user.user;
-            this.navCtrl.push(TabsPage)
+          this.user = user;
+          this.navCtrl.push(TabsPage)
         });
     }
 

@@ -7,8 +7,6 @@ import { HmodalComponent} from "../../components/hmodal/hmodal";
 import { Geolocation } from '@ionic-native/geolocation'
 import {_} from 'underscore'
 
-//import { google } from 'google-maps';
-
 /**
  * Generated class for the HändelserPage page.
  *
@@ -25,15 +23,24 @@ export class HappeningsPage {
   ev: Array<object>;
   events: Events;
   rest: RestProvider;
-
+  avstand: number;
+  latFactor: number;
+  lngFactor: number;
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform) {
     this.events = event;
     this.rest  = rests;
-    this.ev = new Array<object>(); //
+    this.ev = new Array<object>();
+    this.latFactor = 0.0095;
+    this.lngFactor = 0.11067;
     setInterval(() => { //Uppdatera händelselista var 10:e sekund
       this.getEvents();
       }, 10000);
+
+    this.events.subscribe('slider:change', (dist)=>{
+      this.ev = new Array<object>();
+      this.avstand = dist;
+    })
   }
 
   ionViewDidLoad() {
@@ -53,10 +60,10 @@ export class HappeningsPage {
       this.geolocation.getCurrentPosition().then(pos => {
         lat = pos.coords.latitude;
         lng = pos.coords.longitude;
-        startLat = lat-0.5;
-        endLat = lat+0.5;
-        startLng = lng-0.5; //TODO: Bind detta till settings-slider
-        endLng = lng+0.5;
+        startLat = lat-(this.avstand * this.latFactor);
+        endLat = lat+(this.avstand * this.latFactor);
+        startLng = lng-(this.avstand * this.lngFactor); //TODO: Bind detta till settings-slider
+        endLng = lng+(this.avstand * this.lngFactor);
 
         this.rest.getEventsByLocation(startLat.toString(), endLat.toString(),startLng.toString(),endLng.toString()).subscribe(
           async (data) => {//TODO: ändra hur uppdateringen sker.
@@ -96,6 +103,7 @@ export class HappeningsPage {
     let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng,time: time}); //TODO: Fixa modaldisplay för nytt stringformat
     hModal.present();
   }
+
   /*revGeoCode(latLng: google.maps.LatLng){
     let geocoder = new google.maps.Geocoder;
     geocoder.geocode({'location': latLng}, function(results, status){
