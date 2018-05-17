@@ -33,9 +33,9 @@ export class HappeningsPage {
     this.rest  = rests;
     this.ev = new Array<object>(); //
     this.pev = new Array<object>();
-    //setInterval(() => { //Uppdatera händelselista var 10:e sekund
-     // this.getEvents();
-     // }, 10000);
+    setInterval(() => { //Uppdatera händelselista var 10:e sekund
+      this.getEvents();
+      }, 10000);
   }
 
   ionViewDidLoad() {
@@ -44,6 +44,9 @@ export class HappeningsPage {
   }
 
   selectedLocal() {
+    document.getElementById("friends").style.visibility = "hidden";
+    document.getElementById("local").style.visibility = "visible";
+    document.getElementById("police").style.visibility = "hidden";
     this.getEvents();
   }
 
@@ -52,14 +55,18 @@ export class HappeningsPage {
   }
 
   selectedPolice() {
+    document.getElementById("friends").style.visibility = "hidden";
+    document.getElementById("local").style.visibility = "hidden";
+    document.getElementById("police").style.visibility = "visible";
     this.getPoliceEvents();
+  }
+
+  changeContent(view: string){
+
   }
 
 
   getPoliceEvents() {
-    document.getElementById("friends").style.visibility = "hidden";
-    document.getElementById("local").style.visibility = "hidden";
-    document.getElementById("police").style.visibility = "visible";
     let date: Date;
     this.platform.ready().then( () => {
       this.rest.getPoliceEvents().subscribe(
@@ -82,9 +89,6 @@ export class HappeningsPage {
 
 
   getEvents() {
-    document.getElementById("friends").style.visibility = "hidden";
-    document.getElementById("local").style.visibility = "visible";
-    document.getElementById("police").style.visibility = "hidden";
     let lat: number;
     let lng: number;
     let startLat;
