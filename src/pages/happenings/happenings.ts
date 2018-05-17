@@ -4,8 +4,8 @@ import { RestProvider } from '../../providers/rest/rest';
 import { Events } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
-import { Geolocation } from '@ionic-native/geolocation'
-import {_} from 'underscore'
+import { Geolocation } from '@ionic-native/geolocation';
+import {_} from 'underscore';
 
 //import { google } from 'google-maps';
 
@@ -23,6 +23,7 @@ import {_} from 'underscore'
 })
 export class HappeningsPage {
   ev: Array<object>;
+  pev: Array<object>;
   events: Events;
   rest: RestProvider;
 
@@ -31,9 +32,10 @@ export class HappeningsPage {
     this.events = event;
     this.rest  = rests;
     this.ev = new Array<object>(); //
-    setInterval(() => { //Uppdatera händelselista var 10:e sekund
-      this.getEvents();
-      }, 10000);
+    this.pev = new Array<object>();
+    //setInterval(() => { //Uppdatera händelselista var 10:e sekund
+     // this.getEvents();
+     // }, 10000);
   }
 
   ionViewDidLoad() {
@@ -41,7 +43,48 @@ export class HappeningsPage {
     this.getEvents();
   }
 
+  selectedLocal() {
+    this.getEvents();
+  }
+
+  selectedFriends() {
+
+  }
+
+  selectedPolice() {
+    this.getPoliceEvents();
+  }
+
+
+  getPoliceEvents() {
+    document.getElementById("friends").style.visibility = "hidden";
+    document.getElementById("local").style.visibility = "hidden";
+    document.getElementById("police").style.visibility = "visible";
+    let date: Date;
+    this.platform.ready().then( () => {
+      this.rest.getPoliceEvents().subscribe(
+        async(data) => {
+          for(let event in data) {
+            let o = data[event];
+            date = new Date(Date.parse(o.time));
+            let policeevent = {
+              'name' : o.name,
+              'date' : date.toLocaleDateString(),
+              'summary' : o.summary
+            }
+            this.pev.push(policeevent);
+            this.events.publish(o.name);
+            console.log(o.name);
+          }
+      }
+    )});
+  }
+
+
   getEvents() {
+    document.getElementById("friends").style.visibility = "hidden";
+    document.getElementById("local").style.visibility = "visible";
+    document.getElementById("police").style.visibility = "hidden";
     let lat: number;
     let lng: number;
     let startLat;
@@ -88,8 +131,11 @@ export class HappeningsPage {
       })
       }
     );
+  }
 
-
+  presentPoliceEvent(title: string, summary: string) {
+    let hModal = this.modCtrl.create(HmodalComponent, {title: title, summary: summary}); //TODO: Fixa modaldisplay för nytt stringformat
+    hModal.present();
   }
 
   presentModal(title: string, lat: string, lng: string, time: string) {

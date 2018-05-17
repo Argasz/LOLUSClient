@@ -11,6 +11,7 @@ and Angular DI.
 export class RestProvider {
 
     private apiUrl = 'http://lolus.eu-west-1.elasticbeanstalk.com';
+    private policeUrl = 'http://localhost:8100/api/events';
     private geoApiKey = '92e6a7c5bbd4df';
 
     constructor(public http: HttpClient) {
@@ -33,6 +34,10 @@ export class RestProvider {
 
     getEventsByTime(start: string, end: string) {
 
+    }
+
+    getPoliceEvents() {
+      return this.http.get<JSON>(this.policeUrl + '?locationName=Stockholm');
     }
 
     getEventsByLocation(startLat: string, endLat: string, startLng: string, endLng: string){
