@@ -22,7 +22,6 @@ import { HmodalComponent } from "../components/hmodal/hmodal";
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
-
 export const firebaseConfig = {
     apiKey: "AIzaSyDCBpUvRzqrAA5rtpvKsQWgXUt22RiDqr4",
     authDomain: "lolus-201915.firebaseapp.com",
@@ -65,7 +64,7 @@ export const firebaseConfig = {
 	WelcomePage,
     SettingsPage,
     HmodalComponent,
-    GoogleMapComponent,
+    GoogleMapComponent
   ],
   providers: [
     StatusBar,
