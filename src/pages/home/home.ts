@@ -27,8 +27,17 @@ export class HomePage {
         }
     }
 
+    signInWithEmail(user: string, password: string) {
+        firebase.auth()
+        .signInWithEmailAndPassword(user, password)
+        .then(user => {
+            this.user = user;
+            this.navCtrl.push(TabsPage)
+        });
+    }
+
     signInWithFacebook() {
-        this.afAuth.auth
+        firebase.auth()
         .signInWithPopup(new firebase.auth.FacebookAuthProvider())
         .then(user => {
             this.user = user;
@@ -37,43 +46,23 @@ export class HomePage {
     }
 
     signInWithGoogle() {
-        if(!this.platform.is('ios') || !this.platform.is('android')) {
-            this.afAuth.auth
-            .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-            .then(user => {
-                this.user = user.user;
-                this.navCtrl.push(TabsPage)
-            });
-        } else {
-            var provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithRedirect(provider).then(function() {
-                return firebase.auth().getRedirectResult();
-            }).then(function(result) {
-                // This gives you a Google Access Token.
-                // You can use it to access the Google API.
-                //var token = result.credential.accessToken;
-                // The signed-in user info.
-                //var user = result.user;
-                // ...
-                console.log("SUCCESS");
-            }).catch(function(error) {
-            // Handle Errors here.
-            //var errorCode = error.code;
-            //var errorMessage = error.message;
-            console.log("Code is broken");
+        firebase.auth()
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        .then(user => {
+            this.user = user.user;
+            this.navCtrl.push(TabsPage)
         });
     }
-}
 
-signOut() {
-    this.afAuth.auth.signOut();
-}
+    signOut() {
+        firebase.auth().signOut();
+    }
 
-register() {
-    this.myNav.push(RegisterPage);
-}
+    register() {
+        this.myNav.push(RegisterPage);
+    }
 
-clickEvent(e){
-    this.myNav.push(WelcomePage);
-}
+    clickEvent(e){
+        this.myNav.push(WelcomePage);
+    }
 }
