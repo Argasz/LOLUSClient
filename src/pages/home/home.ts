@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { TabsPage } from "../tabs/tabs";
 import { WelcomePage } from "../welcome/welcome";
 import { RegisterPage } from "../register/register";
@@ -18,7 +18,8 @@ export class HomePage {
 
     constructor(
         public navCtrl: NavController,
-        private afAuth: AngularFireAuth
+        private afAuth: AngularFireAuth,
+        private platform: Platform
     ) {
         this.myNav = navCtrl;
         if(firebase.auth().currentUser) {
@@ -36,23 +37,43 @@ export class HomePage {
     }
 
     signInWithGoogle() {
-        this.afAuth.auth
-        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-        .then(user => {
-            this.user = user.user;
-            this.navCtrl.push(TabsPage)
+        if(!this.platform.is('ios') || !this.platform.is('android')) {
+            this.afAuth.auth
+            .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+            .then(user => {
+                this.user = user.user;
+                this.navCtrl.push(TabsPage)
+            });
+        } else {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function() {
+                return firebase.auth().getRedirectResult();
+            }).then(function(result) {
+                // This gives you a Google Access Token.
+                // You can use it to access the Google API.
+                //var token = result.credential.accessToken;
+                // The signed-in user info.
+                //var user = result.user;
+                // ...
+                console.log("SUCCESS");
+            }).catch(function(error) {
+            // Handle Errors here.
+            //var errorCode = error.code;
+            //var errorMessage = error.message;
+            console.log("Code is broken");
         });
     }
+}
 
-    signOut() {
-        this.afAuth.auth.signOut();
-    }
+signOut() {
+    this.afAuth.auth.signOut();
+}
 
-    register() {
-        this.myNav.push(RegisterPage);
-    }
+register() {
+    this.myNav.push(RegisterPage);
+}
 
-    clickEvent(e){
-        this.myNav.push(WelcomePage);
-    }
+clickEvent(e){
+    this.myNav.push(WelcomePage);
+}
 }
