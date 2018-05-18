@@ -21,7 +21,6 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { HmodalComponent } from "../components/hmodal/hmodal";
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-import { Spherical } from '@ionic-native/google-maps';
 
 
 export const firebaseConfig = {
@@ -63,7 +62,7 @@ export const firebaseConfig = {
     TabsPage,
     KartaPage,
     HappeningsPage,
-	WelcomePage,
+	  WelcomePage,
     SettingsPage,
     HmodalComponent,
     GoogleMapComponent,
@@ -73,7 +72,6 @@ export const firebaseConfig = {
     SplashScreen,
     RestProvider,
     Geolocation,
-    Spherical,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })

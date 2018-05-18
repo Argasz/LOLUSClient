@@ -36,11 +36,11 @@ export class HomePage {
         });
     }
 
-    async signInWithGoogle() {
+    signInWithGoogle() {
       this.afAuth.auth
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then(user => {
-          this.user = user;
+          this.user = user.user;
           this.navCtrl.push(TabsPage)
         });
     }

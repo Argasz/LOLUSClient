@@ -38,12 +38,12 @@ export class HappeningsPage {
     this.lngFactor = 0.017649; // Samma för longitud baserat på Stockholms latitud
     this.avstand = 1;
     setInterval(() => { //TODO: Uppdatera händelselista var 10:e sekund, ändra detta
-      if(!this.updating) {
+      if (!this.updating) {
         this.getEvents(false);
       }
     }, 10000);
 
-    this.events.subscribe('slider:change', (dist)=>{
+    this.events.subscribe('slider:change', (dist) => {
       this.avstand = dist;
       this.ev = [];
       this.getEvents(true);
@@ -55,18 +55,19 @@ export class HappeningsPage {
     this.getEvents(true);
   }
 
-  presentLoading(){ //TODO: Annan laddningsgrej för vanlig uppdatering
+  presentLoading() { //TODO: Annan laddningsgrej för vanlig uppdatering
     this.loading = this.loadingCtrl.create({
       content: 'Laddar händelser inom ' + this.avstand + 'km...'
     });
     this.loading.present();
   }
 
-  dismissLoading(){
+  dismissLoading() {
     this.loading.dismiss();
   }
+
   getEvents(presentLoad: boolean) {
-    if(presentLoad){
+    if (presentLoad) {
       this.presentLoading();
     }
     let lat: number;
@@ -78,52 +79,52 @@ export class HappeningsPage {
     let date: Date;
     this.updating = true;
     this.platform.ready().then(() => {
-      this.geolocation.getCurrentPosition().then(pos => {
-        lat = pos.coords.latitude;
-        lng = pos.coords.longitude;
-        startLat = lat-(this.avstand * this.latFactor);
-        endLat = lat+(this.avstand * this.latFactor);
-        startLng = lng-(this.avstand * this.lngFactor);
-        endLng = lng+(this.avstand * this.lngFactor);
+        this.geolocation.getCurrentPosition().then(pos => {
+          lat = pos.coords.latitude;
+          lng = pos.coords.longitude;
+          startLat = lat - (this.avstand * this.latFactor);
+          endLat = lat + (this.avstand * this.latFactor);
+          startLng = lng - (this.avstand * this.lngFactor);
+          endLng = lng + (this.avstand * this.lngFactor);
 
-        this.rest.getEventsByLocation(startLat.toString(), endLat.toString(),startLng.toString(),endLng.toString()).subscribe(
-          async (data) => {//TODO: ändra hur uppdateringen sker.
-            for (let eventsKey in data) {
-              let obj = data[eventsKey];
-              date = new Date(Date.parse(obj.time));
-              let found = await _.some(this.ev, function (x){
-                return (x.lat === obj.lat) && (x.lng === obj.lng) && (x.date === date.toLocaleDateString()) && (x.time === date.toLocaleTimeString());
-              });
-              if(!found) {
-                await this.rest.reverseGeo(obj.lat, obj.lng).then(name => {
-                  let nameObject = JSON.parse(JSON.stringify(name));
-                  let title = nameObject.address.road + ' ' + nameObject.address.suburb;
-                  let o: happening;
-                  o = {
-                    'title': title,
-                    'lat': obj.lat,
-                    'lng': obj.lng,
-                    'date': date.toLocaleDateString(),
-                    'time': date.toLocaleTimeString()
-                  };
-                  this.ev.push(o);
-                  this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+          this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).subscribe(
+            async (data) => {//TODO: ändra hur uppdateringen sker.
+              for (let eventsKey in data) {
+                let obj = data[eventsKey];
+                date = new Date(Date.parse(obj.time));
+                let found = await _.some(this.ev, function (x) {
+                  return (x.lat === obj.lat) && (x.lng === obj.lng) && (x.date === date.toLocaleDateString()) && (x.time === date.toLocaleTimeString());
                 });
+                if (!found) {
+                  await this.rest.reverseGeo(obj.lat, obj.lng).then(name => {
+                    let nameObject = JSON.parse(JSON.stringify(name));
+                    let title = nameObject.address.road + ' ' + nameObject.address.suburb;
+                    let o: happening;
+                    o = {
+                      'title': title,
+                      'lat': obj.lat,
+                      'lng': obj.lng,
+                      'date': date.toLocaleDateString(),
+                      'time': date.toLocaleTimeString()
+                    };
+                    this.ev.push(o);
+                    this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+                  });
+                }
               }
-            }
-            if(presentLoad) {
-              this.dismissLoading();
-            }
-            this.updating = false;
-            //TODO: Sortera efter tid
-            console.log("Updated");
-          }, error => {
-            console.log(error); //TODO: Presentera fel för användare?
-            if(presentLoad){
-              this.dismissLoading();
-            }
-          });
-      })
+              if (presentLoad) {
+                this.dismissLoading();
+              }
+              this.updating = false;
+              //TODO: Sortera efter tid
+              console.log("Updated");
+            }, error => {
+              console.log(error); //TODO: Presentera fel för användare?
+              if (presentLoad) {
+                this.dismissLoading();
+              }
+            });
+        })
       }
     );
 
@@ -131,22 +132,9 @@ export class HappeningsPage {
   }
 
   presentModal(title: string, lat: string, lng: string, time: string) {
-    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng,time: time});
+    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng, time: time});
     hModal.present();
   }
- async isInBounds(lat: string, lng: string){
-   await this.geolocation.getCurrentPosition().then(pos => {
-     let lt = parseFloat(lat);
-     let ln = parseFloat(lng);
-     let startLat = pos.coords.latitude-(this.avstand * this.latFactor);
-     let endLat = pos.coords.latitude+(this.avstand * this.latFactor);
-     let startLng = pos.coords.longitude-(this.avstand * this.lngFactor);
-     let endLng = pos.coords.longitude+(this.avstand * this.lngFactor);
-     return lt >= startLat && lt <= endLat && ln >= startLng && ln <= endLng;
-   })
-
-  }
-
 }
 
 interface happening {
