@@ -21,7 +21,7 @@
 
         <ion-row>
             <ion-col class="colu">
-                <button ion-button id="login" class="login bttn" (click)="clickEvent(e)">LOGIN</button>
+                <button ion-button id="login" class="login bttn" (click)="signInWithEmail('test@user.com', 'testuser')">LOGIN</button>
             </ion-col>
             <ion-col class="colu">
                 <button ion-button class="register" (click)="register()">SKAPA KONTO</button>
@@ -37,6 +37,12 @@
         <ion-row>
             <ion-col class="colu">
                 <button ion-button id="google-login" class="login bttn google-login" (click)="signInWithGoogle()">FORTSÄTT MED GOOGLE</button>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col class="colu">
+                <button ion-button id="email" class="register" (click)="clickEvent($event)">skip login</button>
             </ion-col>
         </ion-row>
 
