@@ -49,8 +49,8 @@ export class HomePage {
         firebase.auth()
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then(user => {
-            this.user = user.user;
-            this.navCtrl.push(TabsPage)
+          this.user = user.user;
+          this.navCtrl.push(TabsPage)
         });
     }
 

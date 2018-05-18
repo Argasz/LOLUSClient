@@ -41,7 +41,7 @@ export const firebaseConfig = {
     TabsPage,
     KartaPage,
     HappeningsPage,
-	WelcomePage,
+	  WelcomePage,
     SettingsPage,
     GoogleMapComponent,
     HmodalComponent
@@ -51,7 +51,7 @@ export const firebaseConfig = {
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -61,7 +61,7 @@ export const firebaseConfig = {
     TabsPage,
     KartaPage,
     HappeningsPage,
-	WelcomePage,
+	  WelcomePage,
     SettingsPage,
     HmodalComponent,
     GoogleMapComponent
