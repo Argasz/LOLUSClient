@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import * as firebase from 'firebase/app';
 
 /**
  * Generated class for the SettingsPage page.
@@ -15,15 +16,36 @@ import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 })
 export class SettingsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events) {
+    user: firebase.User;
+    username: string;
+    photoURL: string
+    events: Events;
+    avstand: number;
+    hasChanges: boolean;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, events: Events) {
+      console.log(firebase.auth().currentUser);
+      this.user = firebase.auth().currentUser;
+      this.username = this.user.displayName;
+      this.photoURL = this.user.photoURL;
+      this.events = events;
+      this.hasChanges = false;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
   }
-
-  setAvstand(avstand: number){
-    this.events.publish('slider:change', avstand);
+  ionViewWillEnter(){
+    this.hasChanges = false;
   }
 
+  ionViewWillLeave() {
+    if(this.hasChanges){
+      this.events.publish("slider:change", this.avstand);
+    }
+  }
+
+  hasChanged(){
+    this.hasChanges = true;
+  }
 }
