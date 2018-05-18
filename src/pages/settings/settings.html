@@ -35,7 +35,7 @@
          <button class="info-button" item-end>
             <ion-icon name="information-circle"></ion-icon>
          </button>
-            <ion-range class="diam-range" min="1" max="10" step="1" pin="true" snaps="true" color="orange" [(ngModel)]="avstand" (ionChange)="setAvstand(avstand)">
+            <ion-range class="diam-range" min="1" max="10" step="1" pin="true" snaps="true" color="orange" [(ngModel)]="avstand" (ionChange) = "hasChanged()">
             </ion-range>
       </ion-item>
 

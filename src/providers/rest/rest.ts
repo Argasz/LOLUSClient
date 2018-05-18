@@ -10,7 +10,7 @@ and Angular DI.
 @Injectable()
 export class RestProvider {
 
-  private apiUrl = 'http://lolus.eu-west-1.elasticbeanstalk.com';
+  private apiUrl = 'https://LOLUS-dev.eu-west-1.elasticbeanstalk.com';
   private geoApiKey = '92e6a7c5bbd4df';
 
   constructor(public http: HttpClient) {
@@ -44,7 +44,7 @@ export class RestProvider {
     let outerThis = this;
     return new Promise(resolve => {
       setTimeout(function(){
-        outerThis.http.get<JSON>('https://eu1.locationiq.org/v1/reverse.php?key=' + outerThis.geoApiKey + '&lat=' + lat + '&lon=' + lng + '&format=json').subscribe(data => {
+        outerThis.http.get<JSON>('https://eu1.locationiq.org/v1/reverse.php?key=' + outerThis.geoApiKey + '&lat=' + lat + '&lon=' + lng + '&countrycodes=se' + '&format=json').subscribe(data => {
           resolve(data);
         });
       }, 1000);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
 import { Events } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
@@ -20,36 +20,55 @@ import {_} from 'underscore'
   templateUrl: 'happenings.html',
 })
 export class HappeningsPage {
-  ev: Array<object>;
+  ev: Array<happening>;
   events: Events;
   rest: RestProvider;
   avstand: number;
   latFactor: number;
   lngFactor: number;
+  updating: boolean;
+  loading: any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
-              public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform) {
+              public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform, public loadingCtrl: LoadingController) {
     this.events = event;
-    this.rest  = rests;
-    this.ev = new Array<object>();
+    this.rest = rests;
+    this.ev = [];
     this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
     this.lngFactor = 0.017649; // Samma för longitud baserat på Stockholms latitud
     this.avstand = 1;
-    setInterval(() => { //Uppdatera händelselista var 10:e sekund
-      this.getEvents();
-      }, 10000);
+    setInterval(() => { //TODO: Uppdatera händelselista var 10:e sekund, ändra detta
+      if(!this.updating) {
+        this.getEvents(false);
+      }
+    }, 10000);
 
     this.events.subscribe('slider:change', (dist)=>{
-      this.ev = new Array<object>();
       this.avstand = dist;
+      this.ev = [];
+      this.getEvents(true);
     })
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HändelserPage');
-    this.getEvents();
+    this.getEvents(true);
   }
 
-  getEvents() {
+  presentLoading(){ //TODO: Annan laddningsgrej för vanlig uppdatering
+    this.loading = this.loadingCtrl.create({
+      content: 'Laddar händelser inom ' + this.avstand + 'km...'
+    });
+    this.loading.present();
+  }
+
+  dismissLoading(){
+    this.loading.dismiss();
+  }
+  getEvents(presentLoad: boolean) {
+    if(presentLoad){
+      this.presentLoading();
+    }
     let lat: number;
     let lng: number;
     let startLat;
@@ -57,13 +76,14 @@ export class HappeningsPage {
     let startLng;
     let endLng;
     let date: Date;
+    this.updating = true;
     this.platform.ready().then(() => {
       this.geolocation.getCurrentPosition().then(pos => {
         lat = pos.coords.latitude;
         lng = pos.coords.longitude;
         startLat = lat-(this.avstand * this.latFactor);
         endLat = lat+(this.avstand * this.latFactor);
-        startLng = lng-(this.avstand * this.lngFactor); //TODO: Bind detta till settings-slider
+        startLng = lng-(this.avstand * this.lngFactor);
         endLng = lng+(this.avstand * this.lngFactor);
 
         this.rest.getEventsByLocation(startLat.toString(), endLat.toString(),startLng.toString(),endLng.toString()).subscribe(
@@ -78,7 +98,8 @@ export class HappeningsPage {
                 await this.rest.reverseGeo(obj.lat, obj.lng).then(name => {
                   let nameObject = JSON.parse(JSON.stringify(name));
                   let title = nameObject.address.road + ' ' + nameObject.address.suburb;
-                  let o = {
+                  let o: happening;
+                  o = {
                     'title': title,
                     'lat': obj.lat,
                     'lng': obj.lng,
@@ -90,9 +111,18 @@ export class HappeningsPage {
                 });
               }
             }
-          }
-        )
-        console.log("Updated");
+            if(presentLoad) {
+              this.dismissLoading();
+            }
+            this.updating = false;
+            //TODO: Sortera efter tid
+            console.log("Updated");
+          }, error => {
+            console.log(error); //TODO: Presentera fel för användare?
+            if(presentLoad){
+              this.dismissLoading();
+            }
+          });
       })
       }
     );
@@ -101,24 +131,28 @@ export class HappeningsPage {
   }
 
   presentModal(title: string, lat: string, lng: string, time: string) {
-    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng,time: time}); //TODO: Fixa modaldisplay för nytt stringformat
+    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng,time: time});
     hModal.present();
   }
+ async isInBounds(lat: string, lng: string){
+   await this.geolocation.getCurrentPosition().then(pos => {
+     let lt = parseFloat(lat);
+     let ln = parseFloat(lng);
+     let startLat = pos.coords.latitude-(this.avstand * this.latFactor);
+     let endLat = pos.coords.latitude+(this.avstand * this.latFactor);
+     let startLng = pos.coords.longitude-(this.avstand * this.lngFactor);
+     let endLng = pos.coords.longitude+(this.avstand * this.lngFactor);
+     return lt >= startLat && lt <= endLat && ln >= startLng && ln <= endLng;
+   })
 
-  /*revGeoCode(latLng: google.maps.LatLng){
-    let geocoder = new google.maps.Geocoder;
-    geocoder.geocode({'location': latLng}, function(results, status){
-      if(status === google.maps.GeocoderStatus.OK){
-        if(results[0]){
-          return(results[0].formatted_address);
-        }else{
-          console.log("Inga resultat.");
-        }
-      }else{
-        console.log("Geocode failed due to: " + status);
-      }
-    })
-  }*/
+  }
 
+}
 
+interface happening {
+  title?: string;
+  lat?: string;
+  lng?: string;
+  date?: string;
+  time?: string;
 }
