@@ -42,6 +42,8 @@ export class HomePage {
         .then(user => {
             this.user = user;
             this.navCtrl.push(TabsPage)
+        }, error => {
+          console.log(error);
         });
     }
 
@@ -51,6 +53,8 @@ export class HomePage {
         .then(user => {
           this.user = user.user;
           this.navCtrl.push(TabsPage)
+        }, error => {
+          console.log(error);
         });
     }
 
