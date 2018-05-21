@@ -12,8 +12,8 @@ import * as firebase from 'firebase/app';
 })
 export class TabsPage {
 
-  tab1Root = KartaPage;
-  tab2Root = HappeningsPage;
+  tab1Root = HappeningsPage;
+  tab2Root = KartaPage;
   tab3Root = SettingsPage;
   user: firebase.User;
 

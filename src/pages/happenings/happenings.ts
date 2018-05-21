@@ -28,6 +28,7 @@ export class HappeningsPage {
   lngFactor: number;
   updating: boolean;
   loading: any;
+  interrupt: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform, public loadingCtrl: LoadingController, public alertController: AlertController) {
@@ -36,27 +37,44 @@ export class HappeningsPage {
     this.ev = [];
     this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
     this.lngFactor = 0.017649; // Samma för longitud baserat på Stockholms latitud
-    this.avstand = 1;
-    setInterval(() => { //TODO: Uppdatera händelselista var 10:e sekund, ändra detta
+    setInterval(() => { //TODO: Uppdatera händelselista var 10:e sekund, ändra detta?
       if (!this.updating) {
         this.getEvents(false);
       }
     }, 10000);
 
-    this.events.subscribe('slider:change', (dist) => {
+    this.events.subscribe('slider:change', async (dist) => {
       this.avstand = dist;
-      this.ev = [];
-      this.getEvents(true);
-    })
+      if(!this.updating){
+        this.getEvents(true);
+      }else{
+        await this.interruptLoad();
+        this.ev = [];
+        this.getEvents(true);
+      }
+    });
   }
 
+  interruptLoad(){
+    let out = this;
+    this.interrupt = true;
+    return new Promise(function(resolve){
+      out.events.subscribe('updating:interrupt', () =>{
+          resolve('ok');
+      })
+    })
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad HändelserPage');
     this.getEvents(true);
   }
 
-  presentLoading() { //TODO: Annan laddningsgrej för vanlig uppdatering
+  presentLoading() {
+    if(this.avstand === null || typeof this.avstand === 'undefined'){
+      this.avstand = 1;
+    }
     this.loading = this.loadingCtrl.create({
+      enableBackdropDismiss: true,
       content: 'Laddar händelser inom ' + this.avstand + 'km...'
     });
     this.loading.present();
@@ -79,7 +97,6 @@ export class HappeningsPage {
     if (presentLoad) {
       this.presentLoading();
     }
-    let out = this;
     let lat: number;
     let lng: number;
     let startLat;
@@ -88,6 +105,7 @@ export class HappeningsPage {
     let endLng;
     let date: Date;
     this.updating = true;
+    this.events.publish('updating:started');
     this.platform.ready().then(() => {
         this.geolocation.getCurrentPosition().then(pos => {
           lat = pos.coords.latitude;
@@ -98,8 +116,11 @@ export class HappeningsPage {
           endLng = lng + (this.avstand * this.lngFactor);
 
           this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).subscribe(
-            async (data) => {//TODO: ändra hur uppdateringen sker.
+            async (data) => {//TODO: ändra hur uppdateringen sker?
               for (let eventsKey in data) {
+                if(this.interrupt){
+                  break;
+                }
                 let obj = data[eventsKey];
                 date = new Date(Date.parse(obj.time));
                 let found = await _.some(this.ev, function (x) {
@@ -117,28 +138,40 @@ export class HappeningsPage {
                       'date': date.toLocaleDateString(),
                       'time': date.toLocaleTimeString()
                     };
-                    this.ev.push(o);
-                    this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+                    if(!this.interrupt){
+                      this.ev.push(o);
+                      this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+                    }
                   });
                 }
               }
-              this.ev.sort(function(a,b){
-                return out.compareHappeningForSort(a, b);
-              });
-              if (presentLoad) {
-                this.dismissLoading();
+              if(!this.interrupt){
+                this.ev.sort(function(a,b){
+                  return HappeningsPage.compareHappeningForSort(a, b);
+                });
+                if (presentLoad && this.loading) {
+                  this.dismissLoading();
+                }
+                this.updating = false;
+                this.events.publish('updating:finished');
+                console.log("Updated");
+              }else{
+                if(presentLoad && this.loading){
+                  this.dismissLoading();
+                }
+                this.updating = false;
+                this.interrupt = false;
+                this.events.publish('updating:interrupt');
               }
-              this.updating = false;
-              //TODO: Sortera efter tid
-              console.log("Updated");
+
             }, error => {
               console.log(error); //TODO: Presentera fel för användare?
-              if (presentLoad) {
+              if (presentLoad && this.loading) {
                 this.dismissLoading();
               }
               this.presentAlert(error);
             });
-        })
+        });
       }
     );
 
@@ -150,7 +183,7 @@ export class HappeningsPage {
     hModal.present();
   }
 
-  compareHappeningForSort(h1: happening, h2: happening){
+  static compareHappeningForSort(h1: happening, h2: happening){
     let date1 = Date.parse(h1.date);
     let date2 = Date.parse(h2.date);
     if(date1 > date2){
