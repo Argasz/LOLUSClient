@@ -24,6 +24,7 @@ export class TabsPage {
   }
 
   goHome(){
+    firebase.auth().signOut();
     this.myNav.push(HomePage);
   }
 }
