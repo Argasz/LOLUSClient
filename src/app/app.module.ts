@@ -22,6 +22,7 @@ import { HmodalComponent } from "../components/hmodal/hmodal";
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { GooglePlus } from '@ionic-native/google-plus';
+import { Hmodal2Component} from "../components/hmodal2/hmodal2";
 
 import { HTTP } from '@ionic-native/http';
 
@@ -48,6 +49,7 @@ export const firebaseConfig = {
     SettingsPage,
     GoogleMapComponent,
     HmodalComponent,
+    Hmodal2Component
   ],
   imports: [
     BrowserModule,
@@ -67,6 +69,7 @@ export const firebaseConfig = {
 	  WelcomePage,
     SettingsPage,
     HmodalComponent,
+    Hmodal2Component,
     GoogleMapComponent
   ],
   providers: [

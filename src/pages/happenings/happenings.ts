@@ -4,6 +4,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { Events } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
+import { Hmodal2Component} from "../../components/hmodal2/hmodal2";
 import { Geolocation } from '@ionic-native/geolocation';
 import {_} from 'underscore';
 
@@ -221,7 +222,7 @@ export class HappeningsPage {
   }
 
   presentPoliceEvent(title: string, summary: string) {
-    let hModal = this.modCtrl.create(HmodalComponent, {title: title, summary: summary}); //TODO: Fixa modaldisplay för nytt stringformat
+    let hModal = this.modCtrl.create(Hmodal2Component, {title: title, summary: summary});
     hModal.present();
   }
 
