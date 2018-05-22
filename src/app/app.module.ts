@@ -21,6 +21,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { HmodalComponent } from "../components/hmodal/hmodal";
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { GooglePlus } from '@ionic-native/google-plus';
 
 import { HTTP } from '@ionic-native/http';
 
@@ -73,6 +74,7 @@ export const firebaseConfig = {
     SplashScreen,
     RestProvider,
     Geolocation,
+    GooglePlus,
     HTTP,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]

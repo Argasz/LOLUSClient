@@ -4,27 +4,52 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Händelser</ion-title>
-  </ion-navbar>
+  <ion-toolbar>
+    <ion-segment color="light" [(ngModel)]="icons">
+      <ion-segment-button value="locate" (ionSelect)="selectedLocal()">
+        <ion-icon name="locate" color="light"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="rss" (ionSelect)="selectedPolice()">
+        <ion-icon name="logo-rss" color="light"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="facebook" (ionSelect)="selectedFriends()">
+        <ion-icon name="logo-facebook" color="light"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <div id="local">
+      <ion-list>
+        <ion-item  *ngFor = "let event of ev">
+          <p>{{event?.title}}</p>
+          <p>Tid: {{event?.time}}</p>
+          <p>Datum: {{event?.date}}</p>
+          <p>Plats: {{event?.lat}}, {{event?.lng}}</p>
+          <button ion-button icon-only item-end clear (click) ="presentModal(event?.title, event?.lat, event?.lng, event?.time)">
+            <ion-icon name="more"></ion-icon>
+          </button>
+        </ion-item>
+      </ion-list>
+  </div>
+  <div id="police">
     <ion-list>
-      <ion-item  *ngFor = "let event of ev">
-        <p>{{event?.title}}</p>
-        <p>Tid: {{event?.time}}</p>
-        <p>Datum: {{event?.date}}</p>
-        <p>Plats: {{event?.lat}}, {{event?.lng}}</p>
-        <button ion-button icon-only item-end clear (click) ="presentModal(event?.title, event?.lat, event?.lng, event?.time)">
+      <ion-item  *ngFor = "let event of pev">
+        <p>{{event?.name}}</p>
+        <p>{{event?.gps}}</p>
+        <button ion-button icon-only item-end clear (click) ="presentPoliceEvent(event?.name, event?.summary)">
           <ion-icon name="more"></ion-icon>
         </button>
       </ion-item>
     </ion-list>
+  </div>
+  <div id="friends">
 
-
+  </div>
 </ion-content>
