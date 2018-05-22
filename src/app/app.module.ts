@@ -23,6 +23,8 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { GooglePlus } from '@ionic-native/google-plus';
 
+import { HTTP } from '@ionic-native/http';
+
 export const firebaseConfig = {
     apiKey: "AIzaSyDCBpUvRzqrAA5rtpvKsQWgXUt22RiDqr4",
     authDomain: "lolus-201915.firebaseapp.com",
@@ -45,7 +47,7 @@ export const firebaseConfig = {
 	  WelcomePage,
     SettingsPage,
     GoogleMapComponent,
-    HmodalComponent
+    HmodalComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,6 +75,7 @@ export const firebaseConfig = {
     RestProvider,
     Geolocation,
     GooglePlus,
+    HTTP,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
