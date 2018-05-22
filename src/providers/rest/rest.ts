@@ -9,22 +9,12 @@ and Angular DI.
 */
 @Injectable()
 export class RestProvider {
-
+  private policeUrl = 'http://localhost:8100/api/events';
   private apiUrl = 'https://LOLUS-dev.eu-west-1.elasticbeanstalk.com';
   private geoApiKey = '92e6a7c5bbd4df';
 
   constructor(public http: HttpClient) {
     //console.log('Hello RestServiceProvider Provider');
-  }
-
-  getJens() {
-    return new Promise(resolve => {
-      this.http.get(this.apiUrl + '/jens').subscribe(data => {
-        resolve(data);
-      }, err => {
-        console.log(err);
-      });
-    });
   }
 
   getAllEvents() {
@@ -33,6 +23,10 @@ export class RestProvider {
 
   getEventsByTime(start: string, end: string) {
 
+  }
+
+  getPoliceEvents() {
+    return this.http.get<JSON>(this.policeUrl + '?locationName=Stockholm');
   }
 
   getEventsByLocation(startLat: string, endLat: string, startLng: string, endLng: string) {

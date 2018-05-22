@@ -4,8 +4,8 @@ import { RestProvider } from '../../providers/rest/rest';
 import { Events } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
-import { Geolocation } from '@ionic-native/geolocation'
-import {_} from 'underscore'
+import { Geolocation } from '@ionic-native/geolocation';
+import {_} from 'underscore';
 
 /**
  * Generated class for the HändelserPage page.
@@ -20,6 +20,8 @@ import {_} from 'underscore'
   templateUrl: 'happenings.html',
 })
 export class HappeningsPage {
+
+  pev: Array<object>;
   ev: Array<happening>;
   events: Events;
   rest: RestProvider;
@@ -33,6 +35,7 @@ export class HappeningsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform, public loadingCtrl: LoadingController, public alertController: AlertController) {
     this.events = event;
+    this.pev = new Array<object>();
     this.rest = rests;
     this.ev = [];
     this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
@@ -79,6 +82,48 @@ export class HappeningsPage {
     });
     this.loading.present();
   }
+
+  selectedLocal() {
+    document.getElementById("friends").style.visibility = "hidden";
+    document.getElementById("local").style.visibility = "visible";
+    document.getElementById("police").style.visibility = "hidden";
+    this.getEvents();
+  }
+
+  selectedFriends() {
+
+  }
+
+  selectedPolice() {
+    document.getElementById("friends").style.visibility = "hidden";
+    document.getElementById("local").style.visibility = "hidden";
+    document.getElementById("police").style.visibility = "visible";
+    this.getPoliceEvents();
+  }
+
+
+
+  getPoliceEvents() {
+    let date: Date;
+    this.platform.ready().then( () => {
+      this.rest.getPoliceEvents().subscribe(
+        async(data) => {
+          for(let event in data) {
+            let o = data[event];
+            date = new Date(Date.parse(o.time));
+            let policeevent = {
+              'name' : o.name,
+              'date' : date.toLocaleDateString(),
+              'summary' : o.summary
+            }
+            this.pev.push(policeevent);
+            this.events.publish(o.name);
+            console.log(o.name);
+          }
+      }
+    )});
+  }
+
 
   presentAlert(error: any) {
     let alert = this.alertController.create({
@@ -174,8 +219,11 @@ export class HappeningsPage {
         });
       }
     );
+  }
 
-
+  presentPoliceEvent(title: string, summary: string) {
+    let hModal = this.modCtrl.create(HmodalComponent, {title: title, summary: summary}); //TODO: Fixa modaldisplay för nytt stringformat
+    hModal.present();
   }
 
   presentModal(title: string, lat: string, lng: string, time: string) {
