@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, LoadingController, AlertController } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
-import { Events } from 'ionic-angular';
+import { Events, Content } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
 import { Geolocation } from '@ionic-native/geolocation';
@@ -21,6 +21,7 @@ import {_} from 'underscore';
 })
 export class HappeningsPage {
 
+  @ViewChild(Content) content: Content;
   pev: Array<object>;
   ev: Array<happening>;
   events: Events;
@@ -57,6 +58,9 @@ export class HappeningsPage {
       }
     });
   }
+  ionViewWillEnter(){
+    this.content.getScrollElement();
+  }
 
   interruptLoad(){
     let out = this;
@@ -87,7 +91,7 @@ export class HappeningsPage {
     document.getElementById("friends").style.visibility = "hidden";
     document.getElementById("local").style.visibility = "visible";
     document.getElementById("police").style.visibility = "hidden";
-    this.getEvents();
+    this.getEvents(true);
   }
 
   selectedFriends() {

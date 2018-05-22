@@ -23,10 +23,12 @@ export class HomePage {
         private platform: Platform,
         private gplus: GooglePlus
     ) {
-
-      this.afAuth.auth.onAuthStateChanged(user =>{
-        if(user){
-          this.navCtrl.push(TabsPage);
+    let out = this;
+      firebase.auth().onAuthStateChanged(user =>{
+        if(firebase.auth().currentUser){
+          this.user = firebase.auth().currentUser;
+          console.log(user);
+          out.navCtrl.push(TabsPage);
         }
       })
     }
@@ -66,16 +68,19 @@ export class HomePage {
 
     nativeGoogleSignIn(){
       try{
-        const gplusUser = this.gplus.login({'webClientId':'1063142852475-e9m10q1g2l5o5kn98gavv9h6ebj7fiks.apps.googleusercontent.com'}).then( () =>{
+        this.gplus.login({'webClientId':'1063142852475-e9m10q1g2l5o5kn98gavv9h6ebj7fiks.apps.googleusercontent.com'}).then( (gplusUser) =>{
+          console.error("NATIVE");
+          console.log(firebase.auth.GoogleAuthProvider.credential(gplusUser.tokenId));
           return this.afAuth.auth.signInWithCredential(firebase.auth.GoogleAuthProvider.credential(gplusUser.idToken));
         }, onerror => {
-          console.log(onerror);
+          console.error(onerror);
         });
 
       } catch(err){
         console.log(err);
       }
     }
+
 
     webGoogleSignIn(){
       firebase.auth()
@@ -87,10 +92,10 @@ export class HomePage {
     }
 
     register() {
-        this.myNav.push(RegisterPage);
+        this.navCtrl.push(RegisterPage);
     }
 
     clickEvent(e){
-        this.myNav.push(WelcomePage);
+        this.navCtrl.push(WelcomePage);
     }
 }
