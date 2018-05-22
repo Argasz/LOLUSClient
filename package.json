@@ -84,7 +84,7 @@
       "cordova-universal-links-plugin": {},
       "cordova-plugin-googleplus": {
         "REVERSED_CLIENT_ID": "com.googleusercontent.apps.1063142852475-rkib0diechq42jnhckaegsij4cu5gkpe"
-      }
+      },
       "cordova-plugin-advanced-http": {}
     },
     "platforms": [
