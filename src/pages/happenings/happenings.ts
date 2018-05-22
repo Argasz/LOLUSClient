@@ -87,7 +87,6 @@ export class HappeningsPage {
     document.getElementById("friends").style.visibility = "hidden";
     document.getElementById("local").style.visibility = "visible";
     document.getElementById("police").style.visibility = "hidden";
-    this.getEvents();
   }
 
   selectedFriends() {
