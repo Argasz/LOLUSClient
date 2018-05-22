@@ -46,6 +46,7 @@
     "cordova-plugin-whitelist": "^1.3.3",
     "cordova-universal-links-plugin": "https://github.com/flipflopapp/cordova-universal-links-plugin.git",
     "firebase": "^4.13.1",
+    "firebase-tools": "^3.18.5",
     "geolocation": "^0.2.0",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
