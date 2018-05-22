@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 import * as firebase from 'firebase/app';
 
 /**
@@ -9,7 +9,6 @@ import * as firebase from 'firebase/app';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html',
@@ -18,18 +17,16 @@ export class SettingsPage {
 
     user: firebase.User;
     username: string;
-    photoURL: string
+    photoURL: string;
     events: Events;
     avstand: number;
     hasChanges: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, events: Events) {
-      console.log(firebase.auth().currentUser);
       this.user = firebase.auth().currentUser;
       this.username = this.user.displayName;
       this.photoURL = this.user.photoURL;
       this.events = events;
-      this.hasChanges = false;
   }
 
   ionViewDidLoad() {

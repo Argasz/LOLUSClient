@@ -9,9 +9,9 @@ and Angular DI.
 */
 @Injectable()
 export class RestProvider {
-
-    private apiUrl = 'https://LOLUS-dev.eu-west-1.elasticbeanstalk.com';
-    private geoApiKey = '92e6a7c5bbd4df';
+  private policeUrl = 'http://localhost:8100/api/events';
+  private apiUrl = 'https://LOLUS-dev.eu-west-1.elasticbeanstalk.com';
+  private geoApiKey = '92e6a7c5bbd4df';
 
     constructor(public http: HttpClient) {
         //console.log('Hello RestServiceProvider Provider');
@@ -25,10 +25,14 @@ export class RestProvider {
 
     }
 
-    getEventsByLocation(startLat: string, endLat: string, startLng: string, endLng: string) {
-        console.log(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
-        return this.http.get<JSON>(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
-    }
+  getPoliceEvents() {
+    return this.http.get<JSON>(this.policeUrl + '?locationName=Stockholm');
+  }
+
+  getEventsByLocation(startLat: string, endLat: string, startLng: string, endLng: string) {
+      console.log(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
+      return this.http.get<JSON>(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
+  }
 
     reverseGeo(lat: string, lng: string) {
         let outerThis = this;
