@@ -4,6 +4,7 @@ import { TabsPage } from "../tabs/tabs";
 import { WelcomePage } from "../welcome/welcome";
 import { RegisterPage } from "../register/register";
 
+import { GooglePlus } from '@ionic-native/google-plus'
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
@@ -19,61 +20,77 @@ export class HomePage {
     constructor(
         public navCtrl: NavController,
         private afAuth: AngularFireAuth,
-        private platform: Platform
+        private platform: Platform,
+        private gplus: GooglePlus
     ) {
-        this.myNav = navCtrl;
-        if(firebase.auth().currentUser) {
-            this.signOut();
+
+      this.afAuth.auth.onAuthStateChanged(user =>{
+        if(user){
+          this.navCtrl.push(TabsPage);
         }
+      })
+    }
+
+    signInWithEmail(user: string, password: string) {
+        firebase.auth()
+        .signInWithEmailAndPassword(user, password)
+        .then(user => {
+          this.user = user;
+          this.navCtrl.push(TabsPage)
+        });
     }
 
     signInWithFacebook() {
-        this.afAuth.auth
+        firebase.auth()
         .signInWithPopup(new firebase.auth.FacebookAuthProvider())
         .then(user => {
             this.user = user;
             this.navCtrl.push(TabsPage)
+        }, error => {
+          console.log(error);
         });
     }
 
-    signInWithGoogle() {
-        if(!this.platform.is('ios') || !this.platform.is('android')) {
-            this.afAuth.auth
-            .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-            .then(user => {
-                this.user = user.user;
-                this.navCtrl.push(TabsPage)
-            });
-        } else {
-            var provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithRedirect(provider).then(function() {
-                return firebase.auth().getRedirectResult();
-            }).then(function(result) {
-                // This gives you a Google Access Token.
-                // You can use it to access the Google API.
-                //var token = result.credential.accessToken;
-                // The signed-in user info.
-                //var user = result.user;
-                // ...
-                console.log("SUCCESS");
-            }).catch(function(error) {
-            // Handle Errors here.
-            //var errorCode = error.code;
-            //var errorMessage = error.message;
-            console.log("Code is broken");
-        });
+     signInWithGoogle() {
+          this.platform.ready().then(()=>{
+            if(this.platform.is('cordova')){
+              this.nativeGoogleSignIn();
+            }else{
+               this.webGoogleSignIn();
+            }
+          },
+              onerror =>{
+            console.log(onerror);
+          });
     }
-}
 
-signOut() {
-    this.afAuth.auth.signOut();
-}
+    nativeGoogleSignIn(){
+      try{
+        const gplusUser = this.gplus.login({'webClientId':'1063142852475-e9m10q1g2l5o5kn98gavv9h6ebj7fiks.apps.googleusercontent.com'}).then( () =>{
+          return this.afAuth.auth.signInWithCredential(firebase.auth.GoogleAuthProvider.credential(gplusUser.idToken));
+        }, onerror => {
+          console.log(onerror);
+        });
 
-register() {
-    this.myNav.push(RegisterPage);
-}
+      } catch(err){
+        console.log(err);
+      }
+    }
 
-clickEvent(e){
-    this.myNav.push(WelcomePage);
-}
+    webGoogleSignIn(){
+      firebase.auth()
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    }
+
+    signOut() {
+        firebase.auth().signOut();
+    }
+
+    register() {
+        this.myNav.push(RegisterPage);
+    }
+
+    clickEvent(e){
+        this.myNav.push(WelcomePage);
+    }
 }

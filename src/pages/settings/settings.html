@@ -29,22 +29,20 @@
         <ion-label>Notifikationer</ion-label>
      <ion-toggle [(ngModel)]="pepperoni"></ion-toggle>
      </ion-item>
-
       <ion-item>
          <ion-label class="avstand-label">Avstånd</ion-label>
          <button class="info-button" item-end>
             <ion-icon name="information-circle"></ion-icon>
          </button>
-            <ion-range class="diam-range" min="0" max="10" step="2" pin="true" snaps="true" color="orange" [(ngModel)]="singleValue4">
-            </ion-range>
+          <ion-range class="diam-range" min="1" max="10" step="1" pin="true" snaps="true" color="orange" [(ngModel)]="avstand" (ionChange) = "hasChanged()">
+          </ion-range>
       </ion-item>
-
      <h1 class="om-lolus">
         Om LOLUS
      </h1>
      <p>
         LOLUS är en applikation skapad av studenter på Stockholms Universitet i samarbete med Stockholm
-        Stad som med stöd av stadens lykstolpar har ambitionen att öka tryggheten för stadens medborgare.
+        Stad som med stöd av stadens lyktstolpar har ambitionen att öka tryggheten för stadens medborgare.
      </p>
    </ion-list>
 
