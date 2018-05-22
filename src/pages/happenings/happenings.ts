@@ -26,15 +26,19 @@ export class HappeningsPage {
   ev: Array<happening>;
   events: Events;
   rest: RestProvider;
+  icons: string = '';
+  currentSegment: object;
   avstand: number;
   latFactor: number;
   lngFactor: number;
   updating: boolean;
   loading: any;
   interrupt: boolean;
+  hasLoadedPoliceEvents: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform, public loadingCtrl: LoadingController, public alertController: AlertController) {
+    this.icons = 'locate';
     this.events = event;
     this.pev = new Array<object>();
     this.rest = rests;
@@ -74,36 +78,54 @@ export class HappeningsPage {
   }
 
   presentLoading() {
-    if(this.avstand === null || typeof this.avstand === 'undefined'){
-      this.avstand = 1;
+  this.loading = this.loadingCtrl.create({
+    enableBackdropDismiss: true,
+  });
+    switch(this.icons){
+      case 'locate':
+        if(this.avstand === null || typeof this.avstand === 'undefined'){
+          this.avstand = 1;
+        }
+        this.loading.setContent('Laddar händelser inom ' + this.avstand + 'km...');
+        break;
+      case 'rss':
+        this.loading.setContent('Laddar polisens händelser...');
+        break;
+      case 'facebook':
+        this.loading.setContent('Laddar ingenting...');
+        break;
     }
-    this.loading = this.loadingCtrl.create({
-      enableBackdropDismiss: true,
-      content: 'Laddar händelser inom ' + this.avstand + 'km...'
-    });
     this.loading.present();
   }
 
   selectedLocal() {
+    this.icons = 'locate';
     document.getElementById("friends").style.visibility = "hidden";
     document.getElementById("local").style.visibility = "visible";
     document.getElementById("police").style.visibility = "hidden";
+    this.currentSegment = document.getElementById("local");
   }
 
   selectedFriends() {
-
+    this.icons = 'facebook';
+    this.currentSegment = document.getElementById("friends");
   }
 
   selectedPolice() {
+    this.icons = 'rss';
     document.getElementById("friends").style.visibility = "hidden";
     document.getElementById("local").style.visibility = "hidden";
     document.getElementById("police").style.visibility = "visible";
+    this.currentSegment = document.getElementById("police");
     this.getPoliceEvents();
   }
 
 
 
   getPoliceEvents() {
+    if(!this.hasLoadedPoliceEvents){
+      this.presentLoading();
+    }
     let date: Date;
     this.platform.ready().then( () => {
       this.rest.getPoliceEvents().subscribe(
@@ -118,10 +140,11 @@ export class HappeningsPage {
             }
             this.pev.push(policeevent);
             this.events.publish(o.name);
-            console.log(o.name);
+            this.dismissLoading();
           }
       }
     )});
+    this.hasLoadedPoliceEvents = true;
   }
 
 
@@ -135,7 +158,10 @@ export class HappeningsPage {
   }
 
   dismissLoading() {
-    this.loading.dismiss();
+    if(this.loading) {
+      this.loading.dismiss();
+      this.loading = null;
+    }
   }
 
   getEvents(presentLoad: boolean) {

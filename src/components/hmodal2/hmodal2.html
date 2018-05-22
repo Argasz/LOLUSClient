@@ -6,17 +6,24 @@
       <button ion-button (click)="dismiss()">Stäng</button>
     </ion-buttons>
     <ion-title>
-      {{title}}
+      Händelseinformation
     </ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content>
-  {{summary}}
-  <div class="cen">
-    <button ion-button color="light" round>Meny</button>
-    <button ion-button color="light" round>Kommentera</button>
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p id="title">{{title}}</p>
+        <p id="summary">{{summary}}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
+<ion-footer>
+  <button ion-button color="light" round block>Meny</button>
+  <button ion-button color="light" round block>Kommentera</button>
+</ion-footer>
