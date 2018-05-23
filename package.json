@@ -41,6 +41,8 @@
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-customurlscheme": "^4.3.0",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-facebook4": "^2.1.0",
+    "cordova-plugin-googleplus": "^5.3.0",
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-inappbrowser": "^3.0.0",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
@@ -82,8 +84,13 @@
       },
       "cordova-plugin-statusbar": {},
       "cordova-universal-links-plugin": {},
+      "cordova-plugin-facebook4": {
+        "APP_ID": "1823176384406530",
+        "APP_NAME": "lolus.app",
+        "ANDROID_SDK_VERSION": "4.+"
+      },
       "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.1063142852475-rkib0diechq42jnhckaegsij4cu5gkpe"
+        "WEB_APPLICATION_CLIENT_ID": "1063142852475-e9m10q1g2l5o5kn98gavv9h6ebj7fiks.apps.googleusercontent.com"
       },
       "cordova-plugin-advanced-http": {}
     },
