@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HomePage } from "../home/home";
 import { NavController, NavParams, Events } from 'ionic-angular';
 import * as firebase from 'firebase/app';
 
@@ -45,4 +46,9 @@ export class SettingsPage {
   hasChanged(){
     this.hasChanges = true;
   }
+
+  goHome(){
+   this.events.publish('user:signout');
+  }
+
 }

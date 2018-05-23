@@ -29,6 +29,18 @@ page-settings {
       margin-right: auto;
    }
 
+   .km1-label {
+      display: inline-block;
+      padding-left: 16px;
+      color: color($colors, light);
+   }
+
+   .km-label {
+      color: color($colors, light);
+      padding-left: 14px;
+      display: inline-block;
+   }
+
    .info-button {
       padding-left: 20px;
       color: color($colors, light);
@@ -48,6 +60,8 @@ page-settings {
    }
 
    .om-lolus {
+      border-top: solid;
+      border-width: thin;
       padding-top: 10px;
       padding-bottom: 1px;
       margin-bottom: 1px;
@@ -58,5 +72,16 @@ page-settings {
       text-align: center;
       font-size: 13px;
       color: color($colors, light);
+      margin-bottom: 5px;
+      padding-bottom: 10px;
+   }
+
+   .colu {
+      text-align: center;
+   }
+
+   .logout-bttn {
+      background-color: color($colors, orange);
+      border-radius: 25px;
    }
 }
