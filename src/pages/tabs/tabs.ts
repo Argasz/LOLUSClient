@@ -27,7 +27,6 @@ export class TabsPage {
   }
 
   goHome(){
-    this.events.publish('user:signout');
     firebase.auth().signOut();
     this.myNav.push(HomePage);
   }
