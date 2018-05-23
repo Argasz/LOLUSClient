@@ -29,14 +29,22 @@
         <ion-label>Notifikationer</ion-label>
      <ion-toggle [(ngModel)]="pepperoni"></ion-toggle>
      </ion-item>
-      <ion-item>
-         <ion-label class="avstand-label">Avstånd</ion-label>
-         <button class="info-button" item-end>
-            <ion-icon name="information-circle"></ion-icon>
-         </button>
+      <ion-item class="range-item" no-lines>
+         <ion-label class="avstand-label">Avstånd i km</ion-label>
           <ion-range class="diam-range" min="1" max="10" step="1" pin="true" snaps="true" color="orange" [(ngModel)]="avstand" (ionChange) = "hasChanged()">
           </ion-range>
       </ion-item>
+      <ion-label class="km1-label">1</ion-label>
+      <ion-label class="km-label">2</ion-label>
+      <ion-label class="km-label">3</ion-label>
+      <ion-label class="km-label">4</ion-label>
+      <ion-label class="km-label">5</ion-label>
+      <ion-label class="km-label">6</ion-label>
+      <ion-label class="km-label">7</ion-label>
+      <ion-label class="km-label">8</ion-label>
+      <ion-label class="km-label">9</ion-label>
+      <ion-label class="km-label">10</ion-label>
+
      <h1 class="om-lolus">
         Om LOLUS
      </h1>
@@ -44,6 +52,13 @@
         LOLUS är en applikation skapad av studenter på Stockholms Universitet i samarbete med Stockholm
         Stad som med stöd av stadens lyktstolpar har ambitionen att öka tryggheten för stadens medborgare.
      </p>
+     <ion-item no-lines>
+     <ion-row>
+        <ion-col class="colu">
+            <button ion-button class="logout-bttn" (click)="goHome()">LOGGA UT</button>
+        </ion-col>
+     </ion-row>
+     </ion-item>
    </ion-list>
 
 </ion-content>
