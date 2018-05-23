@@ -60,7 +60,13 @@ export class HappeningsPage {
         this.ev = [];
         this.getEvents(true);
       }
-    });
+  });
+  this.events.subscribe('map:init', () => {
+      for(let o of this.ev) {
+          this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+      }
+  })
+
   }
 
   interruptLoad(){
