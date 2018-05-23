@@ -15,11 +15,26 @@ export class GoogleMapComponent {
      map: any;
 
   constructor(private platform: Platform, private geolocation: Geolocation, public events: Events) {
+    let curLocation;
     platform.ready().then(() => {
-      geolocation.getCurrentPosition().then( pos=>{
-        this.initMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-        }
-        )
+      geolocation.getCurrentPosition().then( pos=> {
+        let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        this.initMap(latLng);
+        curLocation = new google.maps.Circle({
+          strokeColor: '#0000FF',
+          strokeOpacity: 0.8,
+          fillColor: '#0000FF',
+          fillOpacity: 0.7,
+          map: this.map,
+          center: latLng,
+          radius: 15
+        });
+      });
+        let out = this;
+        geolocation.watchPosition().subscribe(pos =>{
+            let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+            curLocation.setCenter(latLng);
+        });
       }
     );
     events.subscribe('event:created', (title, time, clock, lat, lng) => {

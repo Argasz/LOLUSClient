@@ -21,6 +21,10 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { HmodalComponent } from "../components/hmodal/hmodal";
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { GooglePlus } from '@ionic-native/google-plus';
+import { Hmodal2Component} from "../components/hmodal2/hmodal2";
+
+import { HTTP } from '@ionic-native/http';
 
 export const firebaseConfig = {
     apiKey: "AIzaSyDCBpUvRzqrAA5rtpvKsQWgXUt22RiDqr4",
@@ -41,17 +45,18 @@ export const firebaseConfig = {
     TabsPage,
     KartaPage,
     HappeningsPage,
-	WelcomePage,
+	  WelcomePage,
     SettingsPage,
     GoogleMapComponent,
-    HmodalComponent
+    HmodalComponent,
+    Hmodal2Component
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -61,9 +66,10 @@ export const firebaseConfig = {
     TabsPage,
     KartaPage,
     HappeningsPage,
-	WelcomePage,
+	  WelcomePage,
     SettingsPage,
     HmodalComponent,
+    Hmodal2Component,
     GoogleMapComponent
   ],
   providers: [
@@ -71,6 +77,8 @@ export const firebaseConfig = {
     SplashScreen,
     RestProvider,
     Geolocation,
+    GooglePlus,
+    HTTP,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
