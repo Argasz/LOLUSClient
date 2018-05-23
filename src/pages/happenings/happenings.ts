@@ -6,6 +6,7 @@ import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
 import { Geolocation } from '@ionic-native/geolocation';
 import {_} from 'underscore';
+import * as firebase from 'firebase/app';
 
 /**
  * Generated class for the HändelserPage page.
@@ -14,14 +15,12 @@ import {_} from 'underscore';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-happenings',
   templateUrl: 'happenings.html',
 })
 export class HappeningsPage {
 
-  @ViewChild(Content) content: Content;
   pev: Array<object>;
   ev: Array<happening>;
   events: Events;
@@ -32,6 +31,7 @@ export class HappeningsPage {
   updating: boolean;
   loading: any;
   interrupt: boolean;
+  icons: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform, public loadingCtrl: LoadingController, public alertController: AlertController) {
@@ -39,10 +39,12 @@ export class HappeningsPage {
     this.pev = new Array<object>();
     this.rest = rests;
     this.ev = [];
+    this.icons = 'locate';
     this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
     this.lngFactor = 0.017649; // Samma för longitud baserat på Stockholms latitud
+    this.getEvents(true);
     setInterval(() => { //TODO: Uppdatera händelselista var 10:e sekund, ändra detta?
-      if (!this.updating) {
+      if (!this.updating && firebase.auth().currentUser) {
         this.getEvents(false);
       }
     }, 10000);
@@ -50,6 +52,7 @@ export class HappeningsPage {
     this.events.subscribe('slider:change', async (dist) => {
       this.avstand = dist;
       if(!this.updating){
+        this.ev = [];
         this.getEvents(true);
       }else{
         await this.interruptLoad();
@@ -57,9 +60,13 @@ export class HappeningsPage {
         this.getEvents(true);
       }
     });
-  }
-  ionViewWillEnter(){
-    this.content.getScrollElement();
+
+    this.events.subscribe('user:signout', async ()=>{
+      if(this.updating){
+        await this.interruptLoad();
+        this.ev = [];
+      }
+    });
   }
 
   interruptLoad(){
@@ -68,12 +75,11 @@ export class HappeningsPage {
     return new Promise(function(resolve){
       out.events.subscribe('updating:interrupt', () =>{
           resolve('ok');
-      })
-    })
+      });
+    });
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad HändelserPage');
-    this.getEvents(true);
   }
 
   presentLoading() {
@@ -87,21 +93,10 @@ export class HappeningsPage {
     this.loading.present();
   }
 
-  selectedLocal() {
-    document.getElementById("friends").style.visibility = "hidden";
-    document.getElementById("local").style.visibility = "visible";
-    document.getElementById("police").style.visibility = "hidden";
-    this.getEvents(true);
-  }
 
-  selectedFriends() {
 
-  }
 
   selectedPolice() {
-    document.getElementById("friends").style.visibility = "hidden";
-    document.getElementById("local").style.visibility = "hidden";
-    document.getElementById("police").style.visibility = "visible";
     this.getPoliceEvents();
   }
 
@@ -119,9 +114,9 @@ export class HappeningsPage {
               'name' : o.name,
               'date' : date.toLocaleDateString(),
               'summary' : o.summary
-            }
+            };
             this.pev.push(policeevent);
-            this.events.publish(o.name);
+            //this.events.publish(o.name);
             console.log(o.name);
           }
       }
@@ -133,6 +128,14 @@ export class HappeningsPage {
     let alert = this.alertController.create({
       title: 'Fel vid hämtning av händelser',
       subTitle: error,
+      buttons: ['Avfärda']
+    });
+    alert.present();
+  }
+
+  presentEmpty(){
+    let alert = this.alertController.create({
+      subTitle: 'Inga händelser inom ' + this.avstand + 'km hittade.',
       buttons: ['Avfärda']
     });
     alert.present();
@@ -165,7 +168,7 @@ export class HappeningsPage {
           endLng = lng + (this.avstand * this.lngFactor);
 
           this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).subscribe(
-            async (data) => {//TODO: ändra hur uppdateringen sker?
+            async (data) => {
               for (let eventsKey in data) {
                 if(this.interrupt){
                   break;
@@ -200,6 +203,9 @@ export class HappeningsPage {
                 });
                 if (presentLoad && this.loading) {
                   this.dismissLoading();
+                  if(this.ev.length === 0){
+                    this.presentEmpty();
+                  }
                 }
                 this.updating = false;
                 this.events.publish('updating:finished');

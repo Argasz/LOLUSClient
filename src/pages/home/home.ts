@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
+import { NavController, Platform, ViewController } from 'ionic-angular';
 import { TabsPage } from "../tabs/tabs";
 import { WelcomePage } from "../welcome/welcome";
 import { RegisterPage } from "../register/register";
@@ -14,7 +14,6 @@ import * as firebase from 'firebase/app';
 })
 export class HomePage {
 
-    myNav: NavController;
     user: firebase.User;
 
     constructor(
@@ -23,14 +22,7 @@ export class HomePage {
         private platform: Platform,
         private gplus: GooglePlus
     ) {
-    let out = this;
-      firebase.auth().onAuthStateChanged(user =>{
-        if(firebase.auth().currentUser){
-          this.user = firebase.auth().currentUser;
-          console.log(user);
-          out.navCtrl.push(TabsPage);
-        }
-      })
+
     }
 
     signInWithEmail(user: string, password: string) {
@@ -38,7 +30,6 @@ export class HomePage {
         .signInWithEmailAndPassword(user, password)
         .then(user => {
           this.user = user;
-          this.navCtrl.push(TabsPage)
         });
     }
 
@@ -47,7 +38,6 @@ export class HomePage {
         .signInWithPopup(new firebase.auth.FacebookAuthProvider())
         .then(user => {
             this.user = user;
-            this.navCtrl.push(TabsPage)
         }, error => {
           console.log(error);
         });
@@ -60,6 +50,7 @@ export class HomePage {
             }else{
                this.webGoogleSignIn();
             }
+
           },
               onerror =>{
             console.log(onerror);
@@ -69,9 +60,10 @@ export class HomePage {
     nativeGoogleSignIn(){
       try{
         this.gplus.login({'webClientId':'1063142852475-e9m10q1g2l5o5kn98gavv9h6ebj7fiks.apps.googleusercontent.com'}).then( (gplusUser) =>{
-          console.error("NATIVE");
-          console.log(firebase.auth.GoogleAuthProvider.credential(gplusUser.tokenId));
-          return this.afAuth.auth.signInWithCredential(firebase.auth.GoogleAuthProvider.credential(gplusUser.idToken));
+          let obj = JSON.parse(JSON.stringify(gplusUser));
+            this.user = firebase.auth().currentUser;
+            this.navCtrl.push(TabsPage);
+            return this.afAuth.auth.signInWithCredential(firebase.auth.GoogleAuthProvider.credential(obj.idToken));
         }, onerror => {
           console.error(onerror);
         });
@@ -84,7 +76,12 @@ export class HomePage {
 
     webGoogleSignIn(){
       firebase.auth()
-        .signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(()=>{
+        this.user = firebase.auth().currentUser;
+        this.navCtrl.push(TabsPage);
+      }, onerror =>{
+          console.error(onerror);
+      });
     }
 
     signOut() {
