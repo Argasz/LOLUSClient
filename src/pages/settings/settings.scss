@@ -24,21 +24,13 @@ page-settings {
       padding-bottom: 30px;
    }
 
-   .avstand-label {
-      display: inline-block;
-      margin-right: auto;
+   ion-label {
+      text-align: left;
    }
 
-   .km1-label {
-      display: inline-block;
-      padding-left: 16px;
+   .avstand-badge {
       color: color($colors, light);
-   }
-
-   .km-label {
-      color: color($colors, light);
-      padding-left: 14px;
-      display: inline-block;
+      background-color: color($colors, orange);
    }
 
    .info-button {
@@ -60,8 +52,6 @@ page-settings {
    }
 
    .om-lolus {
-      border-top: solid;
-      border-width: thin;
       padding-top: 10px;
       padding-bottom: 1px;
       margin-bottom: 1px;
