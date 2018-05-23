@@ -4,6 +4,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { Events, Content } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
+import { Hmodal2Component} from "../../components/hmodal2/hmodal2";
 import { Geolocation } from '@ionic-native/geolocation';
 import {_} from 'underscore';
 import * as firebase from 'firebase/app';
@@ -25,6 +26,7 @@ export class HappeningsPage {
   ev: Array<happening>;
   events: Events;
   rest: RestProvider;
+  currentSegment: object;
   avstand: number;
   latFactor: number;
   lngFactor: number;
@@ -32,14 +34,15 @@ export class HappeningsPage {
   loading: any;
   interrupt: boolean;
   icons: string;
+  hasLoadedPoliceEvents: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform, public loadingCtrl: LoadingController, public alertController: AlertController) {
+    this.icons = 'locate';
     this.events = event;
-    this.pev = new Array<object>();
+    this.pev = [];
     this.rest = rests;
     this.ev = [];
-    this.icons = 'locate';
     this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
     this.lngFactor = 0.017649; // Samma för longitud baserat på Stockholms latitud
     this.getEvents(true);
@@ -83,18 +86,30 @@ export class HappeningsPage {
   }
 
   presentLoading() {
-    if(this.avstand === null || typeof this.avstand === 'undefined'){
-      this.avstand = 1;
+  this.loading = this.loadingCtrl.create({
+    enableBackdropDismiss: true,
+  });
+    switch(this.icons){
+      case 'locate':
+        if(this.avstand === null || typeof this.avstand === 'undefined'){
+          this.avstand = 1;
+        }
+        this.loading.setContent('Laddar händelser inom ' + this.avstand + 'km...');
+        break;
+      case 'rss':
+        this.loading.setContent('Laddar polisens händelser...');
+        break;
+      case 'facebook':
+        this.loading.setContent('Laddar ingenting...');
+        break;
     }
-    this.loading = this.loadingCtrl.create({
-      enableBackdropDismiss: true,
-      content: 'Laddar händelser inom ' + this.avstand + 'km...'
-    });
     this.loading.present();
   }
 
-
-
+  selectedFriends() {
+    this.icons = 'facebook';
+    this.currentSegment = document.getElementById("friends");
+  }
 
   selectedPolice() {
     this.getPoliceEvents();
@@ -103,6 +118,9 @@ export class HappeningsPage {
 
 
   getPoliceEvents() {
+    if(!this.hasLoadedPoliceEvents){
+      this.presentLoading();
+    }
     let date: Date;
     this.platform.ready().then( () => {
       this.rest.getPoliceEvents().subscribe(
@@ -116,11 +134,12 @@ export class HappeningsPage {
               'summary' : o.summary
             };
             this.pev.push(policeevent);
-            //this.events.publish(o.name);
             console.log(o.name);
+            this.dismissLoading();
           }
       }
     )});
+    this.hasLoadedPoliceEvents = true;
   }
 
 
@@ -142,7 +161,10 @@ export class HappeningsPage {
   }
 
   dismissLoading() {
-    this.loading.dismiss();
+    if(this.loading) {
+      this.loading.dismiss();
+      this.loading = null;
+    }
   }
 
   getEvents(presentLoad: boolean) {
@@ -232,7 +254,7 @@ export class HappeningsPage {
   }
 
   presentPoliceEvent(title: string, summary: string) {
-    let hModal = this.modCtrl.create(HmodalComponent, {title: title, summary: summary}); //TODO: Fixa modaldisplay för nytt stringformat
+    let hModal = this.modCtrl.create(Hmodal2Component, {title: title, summary: summary});
     hModal.present();
   }
 
@@ -245,30 +267,30 @@ export class HappeningsPage {
     let date1 = Date.parse(h1.date);
     let date2 = Date.parse(h2.date);
     if(date1 > date2){
-      return 1;
-    }else if(date1 < date2){
       return -1;
+    }else if(date1 < date2){
+      return 1;
     }
     let hr1 = parseInt(h1.time.substr(0,2));
     let hr2 = parseInt(h2.time.substr(0,2));
     if(hr1 > hr2){
-      return 1;
-    }else if(hr1 < hr2){
       return -1;
+    }else if(hr1 < hr2){
+      return 1;
     }
     let min1 = parseInt(h1.time.substr(3,2));
     let min2 = parseInt(h2.time.substr(3,2));
     if(min1 > min2){
-      return 1;
-    }else if(min1 < min2){
       return -1;
+    }else if(min1 < min2){
+      return 1;
     }
     let sec1 = parseInt(h1.time.substr(6,2));
     let sec2 = parseInt(h2.time.substr(6, 2));
     if(sec1 > sec2){
-      return 1;
-    }else if(sec1 < sec2){
       return -1;
+    }else if(sec1 < sec2){
+      return 1;
     }else{
       return 0;
     }
