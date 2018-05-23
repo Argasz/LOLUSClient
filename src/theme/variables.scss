@@ -64,6 +64,7 @@ $range-ios-padding-vertical: 1px;
 $range-ios-padding-horizontal: 5px;
 $range-ios-tick-height: 20px;
 $range-ios-tick-width: 2px;
+$range-ios-pin-color: color($colors, light);
 // iOS only Sass variables can go here
 
 
@@ -88,6 +89,7 @@ $range-md-tick-background-color: #bdbdbd;
 $range-md-tick-active-background-color: color($colors, orange);
 $range-md-tick-height: 20px;
 $range-md-knob-width: 25px;
+$range-md-pin-color: color($colors, light);
 
 // --------------------------------------------------
 // Material Design only Sass variables can go here

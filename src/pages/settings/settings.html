@@ -1,14 +1,14 @@
 <!--
-  Generated template for the SettingsPage page.
+Generated template for the SettingsPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
+See http://ionicframework.com/docs/components/#navigation for more info on
+Ionic pages and navigation.
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Inställningar</ion-title>
-  </ion-navbar>
+   <ion-navbar>
+      <ion-title>Inställningar</ion-title>
+   </ion-navbar>
 
 </ion-header>
 
@@ -25,40 +25,35 @@
 
       <h1>{{username}}</h1>
 
-     <ion-item class="notific-item">
-        <ion-label>Notifikationer</ion-label>
-     <ion-toggle [(ngModel)]="pepperoni"></ion-toggle>
-     </ion-item>
-      <ion-item class="range-item" no-lines>
-         <ion-label class="avstand-label">Avstånd i km</ion-label>
-          <ion-range class="diam-range" min="1" max="10" step="1" pin="true" snaps="true" color="orange" [(ngModel)]="avstand" (ionChange) = "hasChanged()">
-          </ion-range>
+      <ion-item class="notific-item">
+         <ion-label>Notifikationer</ion-label>
+         <ion-toggle [(ngModel)]="pepperoni"></ion-toggle>
       </ion-item>
-      <ion-label class="km1-label">1</ion-label>
-      <ion-label class="km-label">2</ion-label>
-      <ion-label class="km-label">3</ion-label>
-      <ion-label class="km-label">4</ion-label>
-      <ion-label class="km-label">5</ion-label>
-      <ion-label class="km-label">6</ion-label>
-      <ion-label class="km-label">7</ion-label>
-      <ion-label class="km-label">8</ion-label>
-      <ion-label class="km-label">9</ion-label>
-      <ion-label class="km-label">10</ion-label>
+      <ion-item class="avstand-item" no-lines>
+         <ion-label>Avstånd i kilometer:</ion-label>
+         <ion-badge class="avstand-badge" item-end>{{avstand}}</ion-badge>
+      </ion-item>
+      <ion-item>
+         <ion-range class="diam-range" min="1" max="10" step="1" pin="true" snaps="true" color="orange" [(ngModel)]="avstand" (ionChange) = "hasChanged()">
+            <ion-label range-left>1</ion-label>
+            <ion-label range-right>10</ion-label>
+         </ion-range>
+      </ion-item>
 
-     <h1 class="om-lolus">
-        Om LOLUS
-     </h1>
-     <p>
-        LOLUS är en applikation skapad av studenter på Stockholms Universitet i samarbete med Stockholm
-        Stad som med stöd av stadens lyktstolpar har ambitionen att öka tryggheten för stadens medborgare.
-     </p>
-     <ion-item no-lines>
-     <ion-row>
-        <ion-col class="colu">
-            <button ion-button class="logout-bttn" (click)="goHome()">LOGGA UT</button>
-        </ion-col>
-     </ion-row>
-     </ion-item>
+      <h1 class="om-lolus">
+         Om LOLUS
+      </h1>
+      <p>
+         LOLUS är en applikation skapad av studenter på Stockholms Universitet i samarbete med Stockholm
+         Stad som med stöd av stadens lyktstolpar har ambitionen att öka tryggheten för stadens medborgare.
+      </p>
+      <ion-item no-lines>
+         <ion-row>
+            <ion-col class="colu">
+               <button ion-button class="logout-bttn" (click)="goHome()">LOGGA UT</button>
+            </ion-col>
+         </ion-row>
+      </ion-item>
    </ion-list>
 
 </ion-content>
