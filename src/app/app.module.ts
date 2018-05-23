@@ -23,6 +23,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { Hmodal2Component} from "../components/hmodal2/hmodal2";
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { HTTP } from '@ionic-native/http';
 
@@ -73,6 +74,7 @@ export const firebaseConfig = {
     GoogleMapComponent
   ],
   providers: [
+    InAppBrowser,
     StatusBar,
     SplashScreen,
     RestProvider,

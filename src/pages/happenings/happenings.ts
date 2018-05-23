@@ -102,7 +102,7 @@ export class HappeningsPage {
         this.loading.setContent('Laddar händelser inom ' + this.avstand + 'km...');
         break;
       case 'rss':
-        this.loading.setContent('Laddar polisens händelser...');
+        this.loading.setContent('Laddar polisens händelser i Stockholm...');
         break;
       case 'facebook':
         this.loading.setContent('Laddar ingenting...');
@@ -117,6 +117,7 @@ export class HappeningsPage {
   }
 
   selectedPolice() {
+    this.icons = 'rss';
     this.getPoliceEvents();
   }
 
@@ -132,14 +133,15 @@ export class HappeningsPage {
         async(data) => {
           for(let event in data) {
             let o = data[event];
-            date = new Date(Date.parse(o.time));
-            let policeevent = {
-              'name' : o.name,
-              'date' : date.toLocaleDateString(),
-              'summary' : o.summary
+            let time = o.name.substring(0, o.name.indexOf(","));
+            let name = o.name.substring(o.name.indexOf(",") + 2, o.name.lastIndexOf(","));
+            let policeEvent = {
+              'name' : name,
+              'date' : time,
+              'summary' : o.summary,
+              'url': o.url
             };
-            this.pev.push(policeevent);
-            console.log(o.name);
+            this.pev.push(policeEvent);
             this.dismissLoading();
           }
       }
@@ -258,8 +260,8 @@ export class HappeningsPage {
     );
   }
 
-  presentPoliceEvent(title: string, summary: string) {
-    let hModal = this.modCtrl.create(Hmodal2Component, {title: title, summary: summary});
+  presentPoliceEvent(title: string, summary: string, url: string) {
+    let hModal = this.modCtrl.create(Hmodal2Component, {title: title, summary: summary, url: url});
     hModal.present();
   }
 
