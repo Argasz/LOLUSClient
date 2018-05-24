@@ -3,6 +3,7 @@ import { google } from 'google-maps';
 import { Platform } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation'
 import { Events } from 'ionic-angular';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'google-map',
@@ -16,24 +17,25 @@ export class GoogleMapComponent {
 
   constructor(private platform: Platform, private geolocation: Geolocation, public events: Events) {
     let curLocation;
-    platform.ready().then(() => {
-      geolocation.getCurrentPosition().then( pos=> {
+    platform.ready().then(async () => {
+      await geolocation.getCurrentPosition().then(pos =>{
+        let ic = {
+          scaledSize: new google.maps.Size(25,25),
+          url: firebase.auth().currentUser.photoURL
+        };
         let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         this.initMap(latLng);
-        curLocation = new google.maps.Circle({
-          strokeColor: '#0000FF',
-          strokeOpacity: 0.8,
-          fillColor: '#0000FF',
-          fillOpacity: 0.7,
+      curLocation = new google.maps.Marker({
           map: this.map,
-          center: latLng,
-          radius: 15
+          position: latLng,
+          icon: ic
         });
+
       });
-        let out = this;
         geolocation.watchPosition().subscribe(pos =>{
-            let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-            curLocation.setCenter(latLng);
+
+          let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          curLocation.setPosition(latLng);
         });
       }
     );
@@ -60,19 +62,11 @@ export class GoogleMapComponent {
           center: coords,
           zoom: 15,
           mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions)
+      };
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
       this.events.publish('map:init');
   }
 
-  getMarker() {
-      var position = new google.maps.LatLng(59.329357,18.068644);
-      var lamp = new google.maps.Marker({position: position, title: "test"});
-      lamp.setMap(this.map);
-      var position2 = new google.maps.LatLng(59.329340,18.068630);
-      var lamp2 = new google.maps.Marker({position: position2, title: "test2"});
-      lamp2.setMap(this.map);
-  }
 
   setMarker(latLng: google.maps.LatLng, title: string){
     let marker = new google.maps.Marker({position: latLng, title: title});

@@ -49,7 +49,7 @@ export class HappeningsPage {
       if (!this.updating && firebase.auth().currentUser) {
         this.getEvents(false);
       }
-    }, 10000);
+    }, 60000);
 
     this.events.subscribe('slider:change', async (dist) => {
       this.avstand = dist;
@@ -123,13 +123,11 @@ export class HappeningsPage {
 
 
 
-  getPoliceEvents() {
+  async getPoliceEvents() {
     if(!this.hasLoadedPoliceEvents){
       this.presentLoading();
     }
-    let date: Date;
-    this.platform.ready().then( () => {
-      this.rest.getPoliceEvents().subscribe(
+      await this.rest.getPoliceEvents().toPromise().then(
         async(data) => {
           for(let event in data) {
             let o = data[event];
@@ -141,11 +139,17 @@ export class HappeningsPage {
               'summary' : o.summary,
               'url': o.url
             };
-            this.pev.push(policeEvent);
-            this.dismissLoading();
+            let found = await _.some(this.pev, function (x) {
+              return (x.name === policeEvent.name) && (x.date === policeEvent.date);
+            });
+            if(!found){
+              this.pev.push(policeEvent);
+            }
+
           }
-      }
-    )});
+      });
+    console.log("Polishändelser uppdaterade");
+    this.dismissLoading();
     this.hasLoadedPoliceEvents = true;
   }
 
@@ -196,7 +200,7 @@ export class HappeningsPage {
           startLng = lng - (this.avstand * this.lngFactor);
           endLng = lng + (this.avstand * this.lngFactor);
 
-          this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).subscribe(
+          this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).toPromise().then(
             async (data) => {
               for (let eventsKey in data) {
                 if (this.interrupt) {
