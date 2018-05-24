@@ -10,7 +10,6 @@ and Angular DI.
 @Injectable()
 export class RestProvider {
 
-  private policeUrl = 'https://polisen.se/api/events';
   private apiUrl = 'https://pvt.dsv.su.se/Group07';
   private googleRevUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
   private geoApiKey = 'AIzaSyDM4lF22az4fKhqSGbsbUS0gYyCjdLgzqo';
@@ -28,7 +27,7 @@ export class RestProvider {
     }
 
   getPoliceEvents() {
-    return this.http.get<JSON>(this.policeUrl + '?locationName=Stockholm');
+    return this.http.get<JSON>(this.apiUrl + "/getPolice" + '?locationName=Stockholm');
   }
 
   getEventsByLocation(startLat: string, endLat: string, startLng: string, endLng: string) {
