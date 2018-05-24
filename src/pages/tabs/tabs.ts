@@ -21,10 +21,12 @@ export class TabsPage {
   constructor(public navCtrl: NavController, public events: Events) {
     this.myNav = navCtrl;
     this.user = firebase.auth().currentUser;
+    this.events.subscribe('user:signout', ()=>{
+      this.goHome();
+   })
   }
 
   goHome(){
-    this.events.publish('user:signout');
     firebase.auth().signOut();
     this.myNav.push(HomePage);
   }

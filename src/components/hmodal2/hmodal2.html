@@ -1,0 +1,32 @@
+<!-- Generated template for the HmodalComponent component -->
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">Stäng</button>
+    </ion-buttons>
+    <ion-title>
+      Händelseinformation
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p id="title">{{title}}</p>
+        <p id="summary">{{summary}}</p>
+        <p id="url">
+          <button ion-button color="light" round (click)="openLink(event?.url)">Läs mer</button>
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <button ion-button color="light" round block>Meny</button>
+  <button ion-button color="light" round block>Kommentera</button>
+</ion-footer>

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Events} from 'ionic-angular';
 
 /*
 Generated class for the RestProvider provider.
@@ -14,28 +13,26 @@ export class RestProvider {
   private apiUrl = 'https://LOLUS-dev.eu-west-1.elasticbeanstalk.com';
   private googleRevUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
   private geoApiKey = 'AIzaSyDM4lF22az4fKhqSGbsbUS0gYyCjdLgzqo';
-  private geoCoder: google.maps.Geocoder;
 
-  constructor(public http: HttpClient, events: Events) {
-    this.geoCoder = new google.maps.Geocoder();
-    //console.log('Hello RestServiceProvider Provider');
-  }
+    constructor(public http: HttpClient) {
+        //console.log('Hello RestServiceProvider Provider');
+    }
 
-  getAllEvents() {
+    getAllEvents() {
     return this.http.get<JSON>(this.apiUrl + '/getAllEvents')
-  }
+    }
 
-  getEventsByTime(start: string, end: string) {
+    getEventsByTime(start: string, end: string) {
 
-  }
+    }
 
   getPoliceEvents() {
     return this.http.get<JSON>(this.policeUrl + '?locationName=Stockholm');
   }
 
   getEventsByLocation(startLat: string, endLat: string, startLng: string, endLng: string) {
-    console.log(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
-    return this.http.get<JSON>(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
+      console.log(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
+      return this.http.get<JSON>(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
   }
 
   reverseGeo(lat: string, lng: string){

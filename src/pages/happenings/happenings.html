@@ -40,9 +40,9 @@
   <div *ngSwitchCase="'rss'">
       <ion-list>
         <ion-item  *ngFor = "let event of pev">
-          <p>{{event?.name}}</p>
-          <p>{{event?.gps}}</p>
-          <button ion-button icon-only item-end clear (click) ="presentPoliceEvent(event?.name, event?.summary)">
+          <p>Händelse: {{event?.name}}</p>
+          <p>Tid: {{event?.date}}</p>
+          <button ion-button icon-only item-end clear (click) ="presentPoliceEvent(event?.name, event?.summary, event?.url)">
             <ion-icon name="more"></ion-icon>
           </button>
         </ion-item>
