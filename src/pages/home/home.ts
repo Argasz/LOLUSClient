@@ -38,6 +38,7 @@ export class HomePage {
         .signInWithPopup(new firebase.auth.FacebookAuthProvider())
         .then(user => {
             this.user = user;
+            this.navCtrl.push(TabsPage);
         }, error => {
           console.log(error);
         });
