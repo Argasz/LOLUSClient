@@ -13,10 +13,20 @@
 </ion-header>
 
 <ion-content>
-    <google-map></google-map>
-  <div class="cen">
-    <button ion-button color="light" round>Meny</button>
-    <button ion-button color="light" round>Kommentera</button>
+   <div style="z-index: 1; height: 70%; width: 100%; padding: 0px; border-width: 0px; margin: 0px; left: 0px; top: 0px;">
+      <google-map></google-map>
+   </div>
+   <div class="information">
+     <p class="left">
+       <strong>Typ av händelse:</strong>
+       <br /><strong>Plats:</strong> {{title}}
+       <br /><strong>Tid:</strong> {{time}}
+     </p>
+     <ion-title>Vet du mer?</ion-title>
+     <ion-row>
+        <ion-col class="button-col">
+           <button class="comment-bttn" ion-button color="light" round>Kommentera händelse</button>
+        </ion-col>
+     </ion-row>
   </div>
 </ion-content>
-
