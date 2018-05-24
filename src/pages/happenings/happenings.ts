@@ -45,7 +45,6 @@ export class HappeningsPage {
     this.ev = [];
     this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
     this.lngFactor = 0.017649; // Samma för longitud baserat på Stockholms latitud
-    this.getEvents(true);
     setInterval(() => { //TODO: Uppdatera händelselista var 10:e sekund, ändra detta?
       if (!this.updating && firebase.auth().currentUser) {
         this.getEvents(false);
@@ -88,6 +87,7 @@ export class HappeningsPage {
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad HändelserPage');
+    this.getEvents(true);
   }
 
   presentLoading() {
@@ -212,7 +212,8 @@ export class HappeningsPage {
                   await this.rest.reverseGeo(obj.lat, obj.lng).toPromise().then((res)=>{
                       let result = JSON.parse(JSON.stringify(res));
                       if(result.results[0]){
-                        title = result.results[0].formatted_address; //TODO: Fixa formattering/filtrering.
+                        let kort = result.results[0].formatted_address.split(',');
+                        title = kort[0] +', ' + kort[1].slice(7);
                       }else{
                         console.log(res);
                         title = "Kunde inte hitta address";

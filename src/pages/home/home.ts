@@ -30,6 +30,7 @@ export class HomePage {
         .signInWithEmailAndPassword(user, password)
         .then(user => {
           this.user = user;
+          this.navCtrl.push(TabsPage);
         });
     }
 
