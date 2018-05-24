@@ -28,6 +28,7 @@ export class SettingsPage {
       this.username = this.user.displayName;
       this.photoURL = this.user.photoURL;
       this.events = events;
+      this.avstand = 1;
   }
 
   ionViewDidLoad() {
