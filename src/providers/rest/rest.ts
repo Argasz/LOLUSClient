@@ -9,8 +9,8 @@ and Angular DI.
 */
 @Injectable()
 export class RestProvider {
-  private policeUrl = 'http://localhost:8100/api/events';
-  private apiUrl = 'https://LOLUS-dev.eu-west-1.elasticbeanstalk.com';
+  private policeUrl = 'https://polisen.se/api/events';
+  private apiUrl = 'https://pvt.dsv.su.se/Group07';
   private geoApiKey = '92e6a7c5bbd4df';
 
     constructor(public http: HttpClient) {
