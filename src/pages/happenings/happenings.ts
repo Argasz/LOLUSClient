@@ -149,8 +149,6 @@ export class HappeningsPage {
     if (presentLoad) {
       this.presentLoading();
     }
-    let lat: number;
-    let lng: number;
     let startLat;
     let endLat;
     let startLng;
@@ -160,6 +158,8 @@ export class HappeningsPage {
     this.events.publish('updating:started');
     this.platform.ready().then(() => {
         this.geolocation.getCurrentPosition().then(pos => {
+          let lat: number;
+          let lng: number;
           lat = pos.coords.latitude;
           lng = pos.coords.longitude;
           startLat = lat - (this.avstand * this.latFactor);
@@ -170,7 +170,7 @@ export class HappeningsPage {
           this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).subscribe(
             async (data) => {
               for (let eventsKey in data) {
-                if(this.interrupt){
+                if (this.interrupt) {
                   break;
                 }
                 let obj = data[eventsKey];
@@ -179,22 +179,32 @@ export class HappeningsPage {
                   return (x.lat === obj.lat) && (x.lng === obj.lng) && (x.date === date.toLocaleDateString()) && (x.time === date.toLocaleTimeString());
                 });
                 if (!found) {
-                  await this.rest.reverseGeo(obj.lat, obj.lng).then(name => {
-                    let nameObject = JSON.parse(JSON.stringify(name));
-                    let title = nameObject.address.road + ' ' + nameObject.address.suburb;
-                    let o: happening;
-                    o = {
-                      'title': title,
-                      'lat': obj.lat,
-                      'lng': obj.lng,
-                      'date': date.toLocaleDateString(),
-                      'time': date.toLocaleTimeString()
-                    };
-                    if(!this.interrupt){
-                      this.ev.push(o);
-                      this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
-                    }
+                  let title: string;
+                  await this.rest.reverseGeo(obj.lat, obj.lng).toPromise().then((res)=>{
+                      let result = JSON.parse(JSON.stringify(res));
+                      if(result.results[0]){
+                        title = result.results[0].formatted_address; //TODO: Fixa formattering/filtrering.
+                      }else{
+                        console.log(res);
+                        title = "Kunde inte hitta address";
+                      }
+
+                  }, rej =>{
+                    console.log(rej.status);
+                    title = "Kunde inte hitta address";
                   });
+                  let o: happening;
+                  o = {
+                    'title': title,
+                    'lat': obj.lat,
+                    'lng': obj.lng,
+                    'date': date.toLocaleDateString(),
+                    'time': date.toLocaleTimeString()
+                  };
+                  if (!this.interrupt) {
+                    this.ev.push(o);
+                    this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+                  }
                 }
               }
               if(!this.interrupt){
@@ -245,30 +255,30 @@ export class HappeningsPage {
     let date1 = Date.parse(h1.date);
     let date2 = Date.parse(h2.date);
     if(date1 > date2){
-      return 1;
-    }else if(date1 < date2){
       return -1;
+    }else if(date1 < date2){
+      return 1;
     }
     let hr1 = parseInt(h1.time.substr(0,2));
     let hr2 = parseInt(h2.time.substr(0,2));
     if(hr1 > hr2){
-      return 1;
-    }else if(hr1 < hr2){
       return -1;
+    }else if(hr1 < hr2){
+      return 1;
     }
     let min1 = parseInt(h1.time.substr(3,2));
     let min2 = parseInt(h2.time.substr(3,2));
     if(min1 > min2){
-      return 1;
-    }else if(min1 < min2){
       return -1;
+    }else if(min1 < min2){
+      return 1;
     }
     let sec1 = parseInt(h1.time.substr(6,2));
     let sec2 = parseInt(h2.time.substr(6, 2));
     if(sec1 > sec2){
-      return 1;
-    }else if(sec1 < sec2){
       return -1;
+    }else if(sec1 < sec2){
+      return 1;
     }else{
       return 0;
     }

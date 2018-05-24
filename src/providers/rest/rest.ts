@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {Events} from 'ionic-angular';
 
 /*
 Generated class for the RestProvider provider.
@@ -11,9 +12,12 @@ and Angular DI.
 export class RestProvider {
   private policeUrl = 'http://localhost:8100/api/events';
   private apiUrl = 'https://LOLUS-dev.eu-west-1.elasticbeanstalk.com';
-  private geoApiKey = '92e6a7c5bbd4df';
+  private googleRevUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
+  private geoApiKey = 'AIzaSyDM4lF22az4fKhqSGbsbUS0gYyCjdLgzqo';
+  private geoCoder: google.maps.Geocoder;
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, events: Events) {
+    this.geoCoder = new google.maps.Geocoder();
     //console.log('Hello RestServiceProvider Provider');
   }
 
@@ -34,14 +38,18 @@ export class RestProvider {
     return this.http.get<JSON>(this.apiUrl + '/getEventsByLocation?startLat=' + startLat + '&endLat=' + endLat + '&startLng=' + startLng + '&endLng=' + endLng);
   }
 
-  reverseGeo(lat: string, lng: string) {
-    let outerThis = this;
-    return new Promise(resolve => {
-      setTimeout(function(){
-        outerThis.http.get<JSON>('https://eu1.locationiq.org/v1/reverse.php?key=' + outerThis.geoApiKey + '&lat=' + lat + '&lon=' + lng + '&countrycodes=se' + '&format=json').subscribe(data => {
-          resolve(data);
-        });
-      }, 1000);
-    });
+  reverseGeo(lat: string, lng: string){
+    return this.http.get<JSON>(this.googleRevUrl+'latlng=' + lat + ',' + lng+'&key='+this.geoApiKey);
   }
 }
+
+/*outerThis.geoCoder.geocode({'location': new google.maps.LatLng(parseFloat(lat), parseFloat(lng))}, function (results, status) {
+  if (status === google.maps.GeocoderStatus.OK) {
+    let res: google.maps.GeocoderResult;
+    res = results[0];
+    resolve(res.formatted_address);
+  } else {
+    console.log(status);
+    reject("Adress ej hittad");
+  }
+});*/
