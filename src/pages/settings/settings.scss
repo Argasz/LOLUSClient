@@ -24,9 +24,13 @@ page-settings {
       padding-bottom: 30px;
    }
 
-   .avstand-label {
-      display: inline-block;
-      margin-right: auto;
+   ion-label {
+      text-align: left;
+   }
+
+   .avstand-badge {
+      color: color($colors, light);
+      background-color: color($colors, orange);
    }
 
    .info-button {
@@ -58,5 +62,16 @@ page-settings {
       text-align: center;
       font-size: 13px;
       color: color($colors, light);
+      margin-bottom: 5px;
+      padding-bottom: 10px;
+   }
+
+   .colu {
+      text-align: center;
+   }
+
+   .logout-bttn {
+      background-color: color($colors, orange);
+      border-radius: 25px;
    }
 }

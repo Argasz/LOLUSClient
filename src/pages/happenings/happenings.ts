@@ -102,7 +102,7 @@ export class HappeningsPage {
         this.loading.setContent('Laddar händelser inom ' + this.avstand + 'km...');
         break;
       case 'rss':
-        this.loading.setContent('Laddar polisens händelser...');
+        this.loading.setContent('Laddar polisens händelser i Stockholm...');
         break;
       case 'facebook':
         this.loading.setContent('Laddar ingenting...');
@@ -117,6 +117,7 @@ export class HappeningsPage {
   }
 
   selectedPolice() {
+    this.icons = 'rss';
     this.getPoliceEvents();
   }
 
@@ -132,14 +133,15 @@ export class HappeningsPage {
         async(data) => {
           for(let event in data) {
             let o = data[event];
-            date = new Date(Date.parse(o.time));
-            let policeevent = {
-              'name' : o.name,
-              'date' : date.toLocaleDateString(),
-              'summary' : o.summary
+            let time = o.name.substring(0, o.name.indexOf(","));
+            let name = o.name.substring(o.name.indexOf(",") + 2, o.name.lastIndexOf(","));
+            let policeEvent = {
+              'name' : name,
+              'date' : time,
+              'summary' : o.summary,
+              'url': o.url
             };
-            this.pev.push(policeevent);
-            console.log(o.name);
+            this.pev.push(policeEvent);
             this.dismissLoading();
           }
       }
@@ -176,8 +178,6 @@ export class HappeningsPage {
     if (presentLoad) {
       this.presentLoading();
     }
-    let lat: number;
-    let lng: number;
     let startLat;
     let endLat;
     let startLng;
@@ -187,6 +187,8 @@ export class HappeningsPage {
     this.events.publish('updating:started');
     this.platform.ready().then(() => {
         this.geolocation.getCurrentPosition().then(pos => {
+          let lat: number;
+          let lng: number;
           lat = pos.coords.latitude;
           lng = pos.coords.longitude;
           startLat = lat - (this.avstand * this.latFactor);
@@ -197,7 +199,7 @@ export class HappeningsPage {
           this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).subscribe(
             async (data) => {
               for (let eventsKey in data) {
-                if(this.interrupt){
+                if (this.interrupt) {
                   break;
                 }
                 let obj = data[eventsKey];
@@ -206,22 +208,32 @@ export class HappeningsPage {
                   return (x.lat === obj.lat) && (x.lng === obj.lng) && (x.date === date.toLocaleDateString()) && (x.time === date.toLocaleTimeString());
                 });
                 if (!found) {
-                  await this.rest.reverseGeo(obj.lat, obj.lng).then(name => {
-                    let nameObject = JSON.parse(JSON.stringify(name));
-                    let title = nameObject.address.road + ' ' + nameObject.address.suburb;
-                    let o: happening;
-                    o = {
-                      'title': title,
-                      'lat': obj.lat,
-                      'lng': obj.lng,
-                      'date': date.toLocaleDateString(),
-                      'time': date.toLocaleTimeString()
-                    };
-                    if(!this.interrupt){
-                      this.ev.push(o);
-                      this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
-                    }
+                  let title: string;
+                  await this.rest.reverseGeo(obj.lat, obj.lng).toPromise().then((res)=>{
+                      let result = JSON.parse(JSON.stringify(res));
+                      if(result.results[0]){
+                        title = result.results[0].formatted_address; //TODO: Fixa formattering/filtrering.
+                      }else{
+                        console.log(res);
+                        title = "Kunde inte hitta address";
+                      }
+
+                  }, rej =>{
+                    console.log(rej.status);
+                    title = "Kunde inte hitta address";
                   });
+                  let o: happening;
+                  o = {
+                    'title': title,
+                    'lat': obj.lat,
+                    'lng': obj.lng,
+                    'date': date.toLocaleDateString(),
+                    'time': date.toLocaleTimeString()
+                  };
+                  if (!this.interrupt) {
+                    this.ev.push(o);
+                    this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+                  }
                 }
               }
               if(!this.interrupt){
@@ -258,8 +270,8 @@ export class HappeningsPage {
     );
   }
 
-  presentPoliceEvent(title: string, summary: string) {
-    let hModal = this.modCtrl.create(Hmodal2Component, {title: title, summary: summary});
+  presentPoliceEvent(title: string, summary: string, url: string) {
+    let hModal = this.modCtrl.create(Hmodal2Component, {title: title, summary: summary, url: url});
     hModal.present();
   }
 

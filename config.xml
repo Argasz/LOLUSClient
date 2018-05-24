@@ -110,7 +110,6 @@
     <plugin name="cordova-plugin-geolocation" />
     <plugin name="cordova-plugin-buildinfo" spec="^2.0.1" />
     <plugin name="cordova-plugin-browsertab" spec="^0.2.0" />
-    <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <plugin name="cordova-plugin-customurlscheme" spec="^4.3.0">
         <variable name="URL_SCHEME" value="com.lolusclient" />
     </plugin>
@@ -124,7 +123,8 @@
     <plugin name="cordova-plugin-googleplus" spec="^5.3.0">
         <variable name="WEB_APPLICATION_CLIENT_ID" value="1063142852475-e9m10q1g2l5o5kn98gavv9h6ebj7fiks.apps.googleusercontent.com" />
     </plugin>
-    <engine name="android" spec="6.4.0" />
     <allow-navigation href="http://213.114.158.115:8100" />
     <plugin name="cordova-plugin-advanced-http" spec="^1.11.1" />
+    <engine name="android" spec="6.4.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
 </widget>
