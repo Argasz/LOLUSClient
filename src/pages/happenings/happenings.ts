@@ -63,9 +63,7 @@ export class HappeningsPage {
       }
   });
   this.events.subscribe('map:init', () => {
-      for(let o of this.ev) {
           this.events.publish('updating:finished', this.ev);
-      }
   });
 
     this.events.subscribe('user:signout', async ()=>{
