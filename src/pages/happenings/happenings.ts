@@ -64,7 +64,7 @@ export class HappeningsPage {
   });
   this.events.subscribe('map:init', () => {
       for(let o of this.ev) {
-          this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+          this.events.publish('updating:finished', this.ev);
       }
   });
 
@@ -252,7 +252,7 @@ export class HappeningsPage {
                   }
                 }
                 this.updating = false;
-                this.events.publish('updating:finished');
+                this.events.publish('updating:finished', this.ev);
                 console.log("Updated");
               }else{
                 if(presentLoad && this.loading){

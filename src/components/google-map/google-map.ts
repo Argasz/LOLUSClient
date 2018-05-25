@@ -14,9 +14,11 @@ export class GoogleMapComponent {
 
     @ViewChild("map") mapElement;
      map: any;
+     eventMarkers: Array<google.maps.Marker>;
 
   constructor(private platform: Platform, private geolocation: Geolocation, public events: Events) {
     let curLocation;
+    this.eventMarkers = [];
     platform.ready().then(async () => {
       await geolocation.getCurrentPosition().then(pos =>{
         let ic = {
@@ -39,10 +41,10 @@ export class GoogleMapComponent {
         });
       }
     );
-    events.subscribe('event:created', (title, time, clock, lat, lng) => {
+    /*events.subscribe('event:created', (title, time, clock, lat, lng) => {
         let latLng = new google.maps.LatLng(lat, lng);
         this.setMarker(latLng, title +'\nTid: ' + clock + ' Datum: ' + time );
-    });
+    });*/
     events.subscribe('modal:open', (lat, lng, title) => {
       let latLng = new google.maps.LatLng(lat, lng);
       this.setMarker(latLng, title);
@@ -54,6 +56,17 @@ export class GoogleMapComponent {
         this.map.panTo(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
       })
     });
+
+    events.subscribe('updating:finished', ev => {
+        for(let m in this.eventMarkers){
+          this.eventMarkers[m].setMap(null);
+        }
+        this.eventMarkers = [];
+        for(let e in ev){
+          let latLng = new google.maps.LatLng(ev[e].lat, ev[e].lng);
+          this.setMarker(latLng, ev[e].title + '\nTid:' + ev[e].time + '\nDatum: ' + ev[e].date);
+        }
+    })
   }
 
   initMap(latLng: google.maps.LatLng) {
@@ -69,8 +82,8 @@ export class GoogleMapComponent {
 
 
   setMarker(latLng: google.maps.LatLng, title: string){
-    let marker = new google.maps.Marker({position: latLng, title: title});
-    marker.setMap(this.map);
+    let marker = new google.maps.Marker({position: latLng, title: title, map:this.map});
+    this.eventMarkers.push(marker);
   }
 
 
