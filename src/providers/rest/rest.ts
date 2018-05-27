@@ -11,7 +11,7 @@ and Angular DI.
 @Injectable()
 export class RestProvider {
 
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = 'https://pvt.dsv.su.se/Group07';
   private googleRevUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
   private geoApiKey = 'AIzaSyDM4lF22az4fKhqSGbsbUS0gYyCjdLgzqo';
 
