@@ -45,9 +45,9 @@ export class GoogleMapComponent {
         let latLng = new google.maps.LatLng(lat, lng);
         this.setMarker(latLng, title +'\nTid: ' + clock + ' Datum: ' + time );
     });*/
-    events.subscribe('modal:open', (lat, lng, title) => {
+    events.subscribe('modal:open', (lat, lng) => {
       let latLng = new google.maps.LatLng(lat, lng);
-      this.setMarker(latLng, title);
+      //this.setMarker(latLng, title);
       this.map.panTo(latLng);
     });
 
@@ -64,7 +64,8 @@ export class GoogleMapComponent {
         this.eventMarkers = [];
         for(let e in ev){
           let latLng = new google.maps.LatLng(ev[e].lat, ev[e].lng);
-          this.setMarker(latLng, ev[e].title + '\nTid:' + ev[e].time + '\nDatum: ' + ev[e].date);
+          this.setMarker(latLng, ev[e].title + '\nTid:' + ev[e].time + '\nDatum: ' + ev[e].date, ev[e].type);
+
         }
     })
   }
@@ -81,8 +82,8 @@ export class GoogleMapComponent {
   }
 
 
-  setMarker(latLng: google.maps.LatLng, title: string){
-    let marker = new google.maps.Marker({position: latLng, title: title, map:this.map});
+  setMarker(latLng: google.maps.LatLng, title: string, type:string){
+    let marker = new google.maps.Marker({position: latLng, title: title, map:this.map,label:type.substr(0,1)});
     this.eventMarkers.push(marker);
   }
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import * as firebase from 'firebase/app';
 
 /*
 Generated class for the RestProvider provider.
@@ -37,6 +38,15 @@ export class RestProvider {
 
   reverseGeo(lat: string, lng: string){
     return this.http.get<JSON>(this.googleRevUrl+'latlng=' + lat + ',' + lng+'&key='+this.geoApiKey);
+  }
+
+  addVote(lat: string, lng: string, time: string, type:string){
+      let userToken = firebase.auth().currentUser.uid;
+      return this.http.get(this.apiUrl+'/addVote?type='+type+'&userToken='+userToken+'&eventTime='+time+'&eventLat='+lat+'&eventLng='+lng);
+  }
+
+  countVotes(lat: string, lng:string, time:string){
+      return this.http.get<JSON>(this.apiUrl+'/countVotes?eventTime='+time+'&eventLat='+lat+'&eventLng='+lng);
   }
 }
 

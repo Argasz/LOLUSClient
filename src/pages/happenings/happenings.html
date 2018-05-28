@@ -14,9 +14,6 @@
       <ion-segment-button value="rss" (ionSelect)="selectedPolice()">
         <ion-icon name="logo-rss" color="light"></ion-icon>
       </ion-segment-button>
-      <ion-segment-button value="facebook">
-        <ion-icon name="logo-facebook" color="light"></ion-icon>
-      </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
@@ -29,10 +26,11 @@
         <ion-list>
           <ion-item  *ngFor = "let event of ev">
             <p class="handelse-title"><strong>Händelse: </strong></p>
+            <p><strong>Typ:</strong> {{event?.type}}</p>
             <p><strong>Tid:</strong> {{event?.time}}</p>
             <p><strong>Datum:</strong> {{event?.date}}</p>
             <p><strong>Plats:</strong> {{event?.title}}</p>
-            <button ion-button class="dots-bttn" color="orange" icon-only item-end clear (click) ="presentModal(event?.title, event?.lat, event?.lng, event?.time)">
+            <button ion-button class="dots-bttn" color="orange" icon-only item-end clear (click) ="presentModal(event?.title, event?.lat, event?.lng, event?.time, event?.date, event?.type)">
               <ion-icon name="more"></ion-icon>
             </button>
           </ion-item>
@@ -50,8 +48,6 @@
           </button>
         </ion-item>
       </ion-list>
-  </div>
-    <div *ngSwitchCase="'facebook'">
     </div>
   </div>
 
