@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import {ViewController, NavParams, Events} from 'ionic-angular';
+import {ViewController, NavParams, Events, AlertController} from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
-
 /**
  * Generated class for the VoteComponent component.
  *
@@ -24,8 +23,9 @@ export class VoteComponent {
   events: Events;
   selectedBtn: HTMLElement;
   selectedType: string;
+  alertCtrl : AlertController;
 
-  constructor(viewCtrl:ViewController, rest: RestProvider, params: NavParams, events: Events) {
+  constructor(viewCtrl:ViewController, rest: RestProvider, params: NavParams, events: Events, alertCtrl: AlertController) {
     this.viewCtrl = viewCtrl;
     this.rest = rest;
     this.lat = params.get('lat');
@@ -33,6 +33,7 @@ export class VoteComponent {
     this.time = params.get('time');
     this.date = params.get('date');
     this.events = events;
+    this.alertCtrl = alertCtrl;
   }
 
   vote(type: string){
@@ -57,9 +58,29 @@ export class VoteComponent {
       console.log(ret);
       rets = ret;
     });
-    if(rets.return === 'Vote saved'){
+    if(rets.return === 'Vote saved') {
       this.events.publish('vote:registered', this.lat, this.lng, this.time, this.date);
+      this.showAlert(true);
+    } else {
+      this.showAlert(false);
     }
+  }
+  showAlert(votePassed: boolean){
+    let alert;
+    if(votePassed) {
+      alert = this.alertCtrl.create({
+        title: 'Röstning registerad',
+        subTitle: 'Tack för din röst!',
+        buttons: ['OK']
+      });
+    } else {
+      alert = this.alertCtrl.create({
+        title: 'Röstning misslyckad',
+        subTitle: 'Du har redan röstat på den här händelsen.',
+        buttons: ['OK']
+      });
+    }
+    alert.present();
   }
 
   dismiss(){
