@@ -15,10 +15,12 @@ export class GoogleMapComponent {
     @ViewChild("map") mapElement;
      map: any;
      eventMarkers: Array<google.maps.Marker>;
+     isInit: boolean;
 
   constructor(private platform: Platform, private geolocation: Geolocation, public events: Events) {
     let curLocation;
     this.eventMarkers = [];
+    this.isInit = false;
     platform.ready().then(async () => {
       await geolocation.getCurrentPosition().then(pos =>{
         let ic = {
@@ -45,13 +47,26 @@ export class GoogleMapComponent {
         let latLng = new google.maps.LatLng(lat, lng);
         this.setMarker(latLng, title +'\nTid: ' + clock + ' Datum: ' + time );
     });*/
-    events.subscribe('modal:open', (lat, lng) => {
+    let out = this;
+    events.subscribe('modal:open', async (lat, lng) => {
       let latLng = new google.maps.LatLng(lat, lng);
+      await new Promise(function(resolve){
+        out.events.subscribe('map:init',()=>{
+          resolve();
+        });
+      });
       //this.setMarker(latLng, title);
       this.map.panTo(latLng);
     });
 
-    events.subscribe('modal:close', ()=>{
+    events.subscribe('modal:close', async ()=>{
+      if(!this.isInit){
+        await new Promise(function(resolve){
+          out.events.subscribe('map:init',()=>{
+            resolve();
+          });
+        });
+      }
       geolocation.getCurrentPosition().then(pos=>{
         this.map.panTo(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
       })
@@ -78,6 +93,7 @@ export class GoogleMapComponent {
           mapTypeId: google.maps.MapTypeId.ROADMAP
       };
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      this.isInit = true;
       this.events.publish('map:init');
   }
 
