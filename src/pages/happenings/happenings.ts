@@ -26,7 +26,6 @@ export class HappeningsPage {
   ev: Array<happening>;
   events: Events;
   rest: RestProvider;
-  currentSegment: object;
   avstand: number;
   latFactor: number;
   lngFactor: number;
@@ -34,13 +33,14 @@ export class HappeningsPage {
   loading: any;
   interrupt: boolean;
   icons: string;
-  hasLoadedPoliceEvents: boolean = false;
+  hasLoadedPoliceEvents: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform, public loadingCtrl: LoadingController, public alertController: AlertController) {
     this.icons = 'locate';
     this.events = event;
     this.pev = [];
+    this.hasLoadedPoliceEvents = false;
     this.rest = rests;
     this.ev = [];
     this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
@@ -108,35 +108,31 @@ export class HappeningsPage {
     console.log('ionViewDidLoad HändelserPage');
     this.getEvents(true);
   }
+  ionViewWillEnter(){
+    this.icons = 'locate';
+  }
+
+  presentPoliceLoading(){
+    this.loading = this.loadingCtrl.create({
+      enableBackdropDismiss: true,
+    });
+    this.loading.setContent('Laddar polisens händelser i Stockholm...');
+    this.loading.present();
+
+  }
 
   presentLoading() {
   this.loading = this.loadingCtrl.create({
     enableBackdropDismiss: true,
   });
-    switch(this.icons){
-      case 'locate':
-        if(this.avstand === null || typeof this.avstand === 'undefined'){
-          this.avstand = 1;
-        }
-        this.loading.setContent('Laddar händelser inom ' + this.avstand + 'km...');
-        break;
-      case 'rss':
-        this.loading.setContent('Laddar polisens händelser i Stockholm...');
-        break;
-      case 'facebook':
-        this.loading.setContent('Laddar ingenting...');
-        break;
+    if(this.avstand === null || typeof this.avstand === 'undefined'){
+      this.avstand = 1;
     }
+    this.loading.setContent('Laddar händelser inom ' + this.avstand + 'km...');
     this.loading.present();
   }
 
-  selectedFriends() {
-    this.icons = 'facebook';
-    this.currentSegment = document.getElementById("friends");
-  }
-
   selectedPolice() {
-    this.icons = 'rss';
     this.getPoliceEvents();
   }
 
@@ -144,7 +140,7 @@ export class HappeningsPage {
 
   async getPoliceEvents() {
     if(!this.hasLoadedPoliceEvents){
-      this.presentLoading();
+      this.presentPoliceLoading();
     }
       await this.rest.getPoliceEvents().toPromise().then(
         async(data) => {
@@ -248,8 +244,8 @@ export class HappeningsPage {
                   });
                   let o: happening;
                   let type: string;
-                  let d = date.toLocaleDateString();
-                  let t = date.toLocaleTimeString();
+                  let d = date.toLocaleDateString('se-SE');
+                  let t = date.toLocaleTimeString('se-SE');
                   await this.rest.countVotes(obj.lat,obj.lng,d+'T'+t).toPromise().then(ret =>{
                     type = JSON.parse(JSON.stringify(ret)).type;
                   }, rej =>{
