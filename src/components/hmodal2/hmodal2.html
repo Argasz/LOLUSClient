@@ -18,13 +18,11 @@
       <ion-col>
         <p id="title">{{title}}</p>
         <p id="summary">{{summary}}</p>
-        <p id="url">
-          <button ion-button color="light" round (click)="openLink(event?.url)">Läs mer</button>
-        </p>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
 
 <ion-footer>
+  <button id="readmore" ion-button color="light" (click)="openLink(event?.url)">Läs mer</button>
 </ion-footer>
