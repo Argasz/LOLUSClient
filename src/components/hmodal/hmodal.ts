@@ -23,6 +23,7 @@ export class HmodalComponent {
   title: string;
   type: string;
   viewCtrl: ViewController;
+  mapHasLoaded: boolean;
   private modCtrl: ModalController;
   constructor(params: NavParams, events: Events, viewCtrl: ViewController, modCtrl: ModalController) {
     this.lat = params.get('lat');
@@ -34,11 +35,14 @@ export class HmodalComponent {
     this.type = params.get('type');
     this.viewCtrl = viewCtrl;
     this.modCtrl = modCtrl;
+    this.mapHasLoaded = false;
+
   }
 
   ionViewDidLoad(){
     this.event.subscribe('map:init', ()=>{
       this.event.publish('modal:open', this.lat, this.lng, this.title);
+      this.mapHasLoaded = true;
     });
 
   }
@@ -49,7 +53,10 @@ export class HmodalComponent {
   }
 
   dismiss(){
-    this.event.publish('modal:close');
+    if(this.mapHasLoaded){
+      this.event.publish('modal:close');
+    }
+    this.mapHasLoaded = false;
     this.viewCtrl.dismiss();
   }
 }

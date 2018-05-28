@@ -28,8 +28,8 @@ export class TabsPage {
    })
   }
 
-  goHome(){
-    firebase.auth().signOut();
+  async goHome(){
+    await firebase.auth().signOut();
     window.location.reload(true);
     this.app.getRootNav().popToRoot();
   }
