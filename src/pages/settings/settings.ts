@@ -38,7 +38,7 @@ export class SettingsPage {
     this.hasChanges = false;
   }
 
-  ionViewWillLeave() {
+  ionViewDidLeave() {
     if(this.hasChanges){
       this.events.publish("slider:change", this.avstand);
     }

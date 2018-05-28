@@ -51,6 +51,7 @@ export class HappeningsPage {
       }
     }, 60000);
 
+
     this.events.subscribe('slider:change', async (dist) => {
       this.avstand = dist;
       if(!this.updating){
@@ -105,7 +106,6 @@ export class HappeningsPage {
     });
   }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad HändelserPage');
     this.getEvents(true);
   }
   ionViewWillEnter(){
@@ -187,10 +187,8 @@ export class HappeningsPage {
   }
 
   dismissLoading() {
-    if(this.loading) {
       this.loading.dismiss();
       this.loading = null;
-    }
   }
 
   getEvents(presentLoad: boolean) {
