@@ -51,6 +51,14 @@ export class VoteComponent {
   }
 
   async confirmVote(){
+    if(this.selectedBtn == null){
+      let alert = this.alertCtrl.create({
+        title: 'Ingen händelsetyp vald',
+        buttons: ['OK']
+      });
+      alert.present();
+      return;
+    }
     let dateTime = this.date +'T'+ this.time;
     console.log(dateTime);
     let rets:any;
