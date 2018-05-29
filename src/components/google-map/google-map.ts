@@ -53,14 +53,15 @@ export class GoogleMapComponent {
     events.subscribe('modal:open', (lat, lng) => {
       let latLng = new google.maps.LatLng(lat, lng);
       //this.setMarker(latLng, title);
-      this.map.panTo(latLng);
+      if(this.map){
+        this.map.panTo(latLng);
+      }
     });
 
     events.subscribe('modal:close', ()=>{
       geolocation.getCurrentPosition().then(pos=>{
         this.map.panTo(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
       });
-      this.map.setClickableIcons(true);
     });
 
     events.subscribe('updating:finished', ev => {
