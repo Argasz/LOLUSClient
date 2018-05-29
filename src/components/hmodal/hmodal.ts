@@ -55,8 +55,8 @@ export class HmodalComponent {
   dismiss(){
     if(this.mapHasLoaded){
       this.event.publish('modal:close');
+      this.mapHasLoaded = false;
+      this.viewCtrl.dismiss();
     }
-    this.mapHasLoaded = false;
-    this.viewCtrl.dismiss();
   }
 }
