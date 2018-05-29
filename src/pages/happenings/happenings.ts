@@ -242,8 +242,8 @@ export class HappeningsPage {
                   });
                   let o: happening;
                   let type: string;
-                  let d = date.toLocaleDateString('se-SE');
-                  let t = date.toLocaleTimeString('se-SE');
+                  let d = date.toLocaleDateString('sv-SE');
+                  let t = date.toLocaleTimeString('sv-SE');
                   await this.rest.countVotes(obj.lat,obj.lng,d+'T'+t).toPromise().then(ret =>{
                     type = JSON.parse(JSON.stringify(ret)).type;
                   }, rej =>{
