@@ -297,8 +297,8 @@ export class HappeningsPage {
     );
   }
 
-  presentPoliceEvent(title: string, summary: string, url: string) {
-    let hModal = this.modCtrl.create(Hmodal2Component, {title: title, summary: summary, url: url});
+  presentPoliceEvent(title: string, summary: string, date: string, url: string) {
+    let hModal = this.modCtrl.create(Hmodal2Component, {title: title, summary: summary, date: date, url: url});
     hModal.present();
   }
 

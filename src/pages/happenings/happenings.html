@@ -43,7 +43,7 @@
           <p><strong>Händelse:</strong> {{event?.name}}</p>
           <p><strong>Tid:</strong> {{event?.date}}</p>
           <p>{{event?.summary}}</p>
-          <button ion-button class="dots-bttn" color="orange" icon-only item-end clear (click) ="presentPoliceEvent(event?.name, event?.summary, event?.url)">
+          <button ion-button class="dots-bttn" color="orange" icon-only item-end clear (click) ="presentPoliceEvent(event?.name, event?.summary, event?.date, event?.url)">
             <ion-icon name="more"></ion-icon>
           </button>
         </ion-item>

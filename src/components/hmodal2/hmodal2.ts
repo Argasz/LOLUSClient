@@ -15,6 +15,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 export class Hmodal2Component {
   title: string;
   summary: string;
+  date: string;
   url: string;
   event: any;
   iab: InAppBrowser;
@@ -24,6 +25,7 @@ export class Hmodal2Component {
     this.title = params.get('title');
     this.summary = params.get('summary');
     this.url = params.get('url');
+    this.date = params.get('date');
     this.event = events;
     this.viewCtrl = viewCtrl;
     this.iab = iab;
@@ -38,4 +40,3 @@ export class Hmodal2Component {
     this.viewCtrl.dismiss();
   }
 }
-
