@@ -17,8 +17,16 @@
     <ion-row>
       <ion-col>
         <p id="title">{{title}}</p>
+
         <p id="summary">{{summary}}</p>
+        <p class="date">Tid: {{date}}</p>
+        <p class="url">Läs mer på polisens hemsida: <br><a class="link" href="{{url}}" target="_blank">{{url}}</a></p>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+<!--
+<ion-footer>
+  <button id="readmore" ion-button color="light" (click)="openLink(event?.url)">Läs mer</button>
+</ion-footer>
+-->
