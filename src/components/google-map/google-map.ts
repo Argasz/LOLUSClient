@@ -90,7 +90,10 @@ export class GoogleMapComponent {
       let mapOptions: google.maps.MapOptions = {
           center: coords,
           zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          streetViewControl: false,
+          fullscreenControl: false,
+          mapTypeControl: false
       };
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
       this.events.publish('map:init');
