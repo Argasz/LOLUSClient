@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {NavParams, Events, ViewController} from 'ionic-angular';
+import {NavParams, Events, ViewController, ModalController} from 'ionic-angular';
+import {VoteComponent} from "../vote/vote";
 
 
 /**
@@ -17,26 +18,45 @@ export class HmodalComponent {
   lng: string;
   lat: string;
   time: string;
+  date: string;
   event: any;
   title: string;
+  type: string;
   viewCtrl: ViewController;
-  constructor(params: NavParams, events: Events, viewCtrl: ViewController) {
+  mapHasLoaded: boolean;
+  private modCtrl: ModalController;
+  constructor(params: NavParams, events: Events, viewCtrl: ViewController, modCtrl: ModalController) {
     this.lat = params.get('lat');
     this.lng = params.get('lng');
     this.title = params.get('title');
     this.time = params.get('time');
+    this.date = params.get('date');
     this.event = events;
+    this.type = params.get('type');
     this.viewCtrl = viewCtrl;
+    this.modCtrl = modCtrl;
+    this.mapHasLoaded = false;
+
   }
 
   ionViewDidLoad(){
     this.event.subscribe('map:init', ()=>{
       this.event.publish('modal:open', this.lat, this.lng, this.title);
+      this.mapHasLoaded = true;
     });
 
   }
+
+  vote(){
+    let voteModal = this.modCtrl.create(VoteComponent, {lat: this.lat, lng: this.lng, time: this.time, date: this.date});
+    voteModal.present();
+  }
+
   dismiss(){
-    this.event.publish('modal:close');
-    this.viewCtrl.dismiss();
+    if(this.mapHasLoaded){
+      this.event.publish('modal:close');
+      this.mapHasLoaded = false;
+      this.viewCtrl.dismiss();
+    }
   }
 }

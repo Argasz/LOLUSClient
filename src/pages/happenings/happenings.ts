@@ -1,7 +1,7 @@
-import {Component, ViewChild} from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, LoadingController, AlertController } from 'ionic-angular';
+import {Component} from '@angular/core';
+import { NavController, NavParams, Platform, LoadingController, AlertController } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
-import { Events, Content } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { HmodalComponent} from "../../components/hmodal/hmodal";
 import { Hmodal2Component} from "../../components/hmodal2/hmodal2";
@@ -26,7 +26,6 @@ export class HappeningsPage {
   ev: Array<happening>;
   events: Events;
   rest: RestProvider;
-  currentSegment: object;
   avstand: number;
   latFactor: number;
   lngFactor: number;
@@ -34,23 +33,24 @@ export class HappeningsPage {
   loading: any;
   interrupt: boolean;
   icons: string;
-  hasLoadedPoliceEvents: boolean = false;
+  hasLoadedPoliceEvents: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public rests: RestProvider, public event: Events,
               public modCtrl: ModalController, public geolocation: Geolocation, public platform: Platform, public loadingCtrl: LoadingController, public alertController: AlertController) {
     this.icons = 'locate';
     this.events = event;
     this.pev = [];
+    this.hasLoadedPoliceEvents = false;
     this.rest = rests;
     this.ev = [];
     this.latFactor = 0.0090437; //Faktor för hur många latitudgrader som är en kilometer
     this.lngFactor = 0.017649; // Samma för longitud baserat på Stockholms latitud
-    this.getEvents(true);
-    setInterval(() => { //TODO: Uppdatera händelselista var 10:e sekund, ändra detta?
+    setInterval(() => {
       if (!this.updating && firebase.auth().currentUser) {
         this.getEvents(false);
       }
-    }, 10000);
+    }, 60000);
+
 
     this.events.subscribe('slider:change', async (dist) => {
       this.avstand = dist;
@@ -63,10 +63,29 @@ export class HappeningsPage {
         this.getEvents(true);
       }
   });
-  this.events.subscribe('map:init', () => {
-      for(let o of this.ev) {
-          this.events.publish('event:created', o.title, o.date, o.time, o.lat, o.lng);
+    this.events.subscribe('vote:registered', async(lat, lng, time, date) =>{
+      let out = this;
+      if(!this.updating){
+          this.ev = _.reject(this.ev, function(x){
+            return x.lat === lat && x.lng === lng && x.time === time && x.date === date;
+
+        });
+          this.getEvents(false);
+      }else{
+        await new Promise(function(resolve){
+          out.events.subscribe('updating:finished', ()=>{
+            resolve('ok');
+          })
+        });
+        this.ev = _.reject(this.ev, function(x){
+          return x.lat === lat && x.lng === lng && x.time === time && x.date === date;
+
+        });
+        this.getEvents(false);
       }
+    });
+  this.events.subscribe('map:init', () => {
+          this.events.publish('updating:finished', this.ev);
   });
 
     this.events.subscribe('user:signout', async ()=>{
@@ -87,49 +106,43 @@ export class HappeningsPage {
     });
   }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad HändelserPage');
+    this.getEvents(true);
+  }
+  ionViewWillEnter(){
+    this.icons = 'locate';
+  }
+
+  presentPoliceLoading(){
+    this.loading = this.loadingCtrl.create({
+      enableBackdropDismiss: true,
+    });
+    this.loading.setContent('Laddar polisens händelser i Stockholm...');
+    this.loading.present();
+
   }
 
   presentLoading() {
   this.loading = this.loadingCtrl.create({
     enableBackdropDismiss: true,
   });
-    switch(this.icons){
-      case 'locate':
-        if(this.avstand === null || typeof this.avstand === 'undefined'){
-          this.avstand = 1;
-        }
-        this.loading.setContent('Laddar händelser inom ' + this.avstand + 'km...');
-        break;
-      case 'rss':
-        this.loading.setContent('Laddar polisens händelser i Stockholm...');
-        break;
-      case 'facebook':
-        this.loading.setContent('Laddar ingenting...');
-        break;
+    if(this.avstand === null || typeof this.avstand === 'undefined'){
+      this.avstand = 1;
     }
+    this.loading.setContent('Laddar händelser inom ' + this.avstand + 'km...');
     this.loading.present();
   }
 
-  selectedFriends() {
-    this.icons = 'facebook';
-    this.currentSegment = document.getElementById("friends");
-  }
-
   selectedPolice() {
-    this.icons = 'rss';
     this.getPoliceEvents();
   }
 
 
 
-  getPoliceEvents() {
+  async getPoliceEvents() {
     if(!this.hasLoadedPoliceEvents){
-      this.presentLoading();
+      this.presentPoliceLoading();
     }
-    let date: Date;
-    this.platform.ready().then( () => {
-      this.rest.getPoliceEvents().subscribe(
+      await this.rest.getPoliceEvents().toPromise().then(
         async(data) => {
           for(let event in data) {
             let o = data[event];
@@ -141,11 +154,17 @@ export class HappeningsPage {
               'summary' : o.summary,
               'url': o.url
             };
-            this.pev.push(policeEvent);
-            this.dismissLoading();
+            let found = await _.some(this.pev, function (x) {
+              return (x.name === policeEvent.name) && (x.date === policeEvent.date);
+            });
+            if(!found){
+              this.pev.push(policeEvent);
+            }
+
           }
-      }
-    )});
+      });
+    console.log("Polishändelser uppdaterade");
+    this.dismissLoading();
     this.hasLoadedPoliceEvents = true;
   }
 
@@ -168,10 +187,8 @@ export class HappeningsPage {
   }
 
   dismissLoading() {
-    if(this.loading) {
       this.loading.dismiss();
       this.loading = null;
-    }
   }
 
   getEvents(presentLoad: boolean) {
@@ -196,7 +213,7 @@ export class HappeningsPage {
           startLng = lng - (this.avstand * this.lngFactor);
           endLng = lng + (this.avstand * this.lngFactor);
 
-          this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).subscribe(
+          this.rest.getEventsByLocation(startLat.toString(), endLat.toString(), startLng.toString(), endLng.toString()).toPromise().then(
             async (data) => {
               for (let eventsKey in data) {
                 if (this.interrupt) {
@@ -212,7 +229,8 @@ export class HappeningsPage {
                   await this.rest.reverseGeo(obj.lat, obj.lng).toPromise().then((res)=>{
                       let result = JSON.parse(JSON.stringify(res));
                       if(result.results[0]){
-                        title = result.results[0].formatted_address; //TODO: Fixa formattering/filtrering.
+                        let kort = result.results[0].formatted_address.split(',');
+                        title = kort[0] +', ' + kort[1].slice(7);
                       }else{
                         console.log(res);
                         title = "Kunde inte hitta address";
@@ -223,12 +241,21 @@ export class HappeningsPage {
                     title = "Kunde inte hitta address";
                   });
                   let o: happening;
+                  let type: string;
+                  let d = date.toLocaleDateString('sv-SE');
+                  let t = date.toLocaleTimeString('sv-SE');
+                  await this.rest.countVotes(obj.lat,obj.lng,d+'T'+t).toPromise().then(ret =>{
+                    type = JSON.parse(JSON.stringify(ret)).type;
+                  }, rej =>{
+                    type = 'Okänd';
+                  });
                   o = {
                     'title': title,
                     'lat': obj.lat,
                     'lng': obj.lng,
-                    'date': date.toLocaleDateString(),
-                    'time': date.toLocaleTimeString()
+                    'date': d,
+                    'time': t,
+                    'type': type
                   };
                   if (!this.interrupt) {
                     this.ev.push(o);
@@ -247,7 +274,7 @@ export class HappeningsPage {
                   }
                 }
                 this.updating = false;
-                this.events.publish('updating:finished');
+                this.events.publish('updating:finished', this.ev);
                 console.log("Updated");
               }else{
                 if(presentLoad && this.loading){
@@ -275,8 +302,8 @@ export class HappeningsPage {
     hModal.present();
   }
 
-  presentModal(title: string, lat: string, lng: string, time: string) {
-    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng, time: time});
+  presentModal(title: string, lat: string, lng: string, time: string, date: string, type:string) {
+    let hModal = this.modCtrl.create(HmodalComponent, {title: title, lat: lat, lng: lng, time: time,date: date,type:type});
     hModal.present();
   }
 
@@ -320,4 +347,5 @@ interface happening {
   lng?: string;
   date?: string;
   time?: string;
+  type?: string;
 }

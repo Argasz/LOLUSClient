@@ -25,11 +25,16 @@ export class HomePage {
 
     }
 
+    ionViewWillEnter(){
+
+    }
+
     signInWithEmail(user: string, password: string) {
         firebase.auth()
         .signInWithEmailAndPassword(user, password)
         .then(user => {
           this.user = user;
+          this.navCtrl.push(WelcomePage);
         });
     }
 
@@ -38,7 +43,7 @@ export class HomePage {
         .signInWithPopup(new firebase.auth.FacebookAuthProvider())
         .then(user => {
             this.user = user;
-            this.navCtrl.push(TabsPage);
+            this.navCtrl.push(WelcomePage);
         }, error => {
           console.log(error);
         });
@@ -63,7 +68,7 @@ export class HomePage {
         this.gplus.login({'webClientId':'1063142852475-e9m10q1g2l5o5kn98gavv9h6ebj7fiks.apps.googleusercontent.com'}).then( (gplusUser) =>{
           let obj = JSON.parse(JSON.stringify(gplusUser));
             this.user = firebase.auth().currentUser;
-            this.navCtrl.push(TabsPage);
+            this.navCtrl.push(WelcomePage);
             return this.afAuth.auth.signInWithCredential(firebase.auth.GoogleAuthProvider.credential(obj.idToken));
         }, onerror => {
           console.error(onerror);
@@ -79,7 +84,7 @@ export class HomePage {
       firebase.auth()
         .signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(()=>{
         this.user = firebase.auth().currentUser;
-        this.navCtrl.push(TabsPage);
+        this.navCtrl.push(WelcomePage);
       }, onerror =>{
           console.error(onerror);
       });

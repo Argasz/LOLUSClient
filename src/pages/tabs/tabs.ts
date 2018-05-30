@@ -3,7 +3,7 @@ import {KartaPage} from "../karta/karta";
 import {HappeningsPage} from "../happenings/happenings";
 import { SettingsPage } from "../settings/settings";
 import {HomePage} from "../home/home";
-import {NavController, Events} from "ionic-angular";
+import {NavController, Events, App} from "ionic-angular";
 import * as firebase from 'firebase/app';
 
 
@@ -16,18 +16,21 @@ export class TabsPage {
   tab2Root = KartaPage;
   tab3Root = SettingsPage;
   user: firebase.User;
+  private app;
 
   myNav: NavController;
-  constructor(public navCtrl: NavController, public events: Events) {
+  constructor(public navCtrl: NavController, public events: Events, private apps: App) {
     this.myNav = navCtrl;
     this.user = firebase.auth().currentUser;
+    this.app = apps;
     this.events.subscribe('user:signout', ()=>{
       this.goHome();
    })
   }
 
-  goHome(){
-    firebase.auth().signOut();
-    this.myNav.push(HomePage);
+  async goHome(){
+    await firebase.auth().signOut();
+    window.location.reload(true);
+    this.app.getRootNav().popToRoot();
   }
 }

@@ -1,0 +1,50 @@
+<!-- Generated template for the VoteComponent component -->
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">Stäng</button>
+    </ion-buttons>
+    <ion-title>
+      Välj typ av händelse.
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid padding color="white">
+    <ion-row>
+      <ion-col>
+        <img class="votebtn" id="Pistolskott" src="../../assets/imgs/Pistolskott.PNG" (click)="vote('Pistolskott')">
+        Pistolskott
+      </ion-col>
+      <ion-col>
+        <img class="votebtn" id="Rån" src="../../assets/imgs/Rån.PNG" (click)="vote('Rån')">
+        Rån
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img class="votebtn" id="Bilstöld" src="../../assets/imgs/Bilstöld.PNG" (click)="vote('Bilstöld')">
+        Bilstöld
+      </ion-col>
+      <ion-col>
+        <img class="votebtn" id="Olycka" src="../../assets/imgs/Olycka.PNG" (click)="vote('Olycka')">
+        Olycka
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <img class="votebtn" id="Explosion" src="../../assets/imgs/Explosion.PNG" (click)="vote('Explosion')">
+        Explosion
+      </ion-col>
+      <ion-col>
+        <img class="votebtn" id="Skadegörelse" src="../../assets/imgs/Skadegörelse.PNG" (click)="vote('Skadegörelse')">
+        Skadegörelse
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <button ion-button block id="confirmbtn" (click)="confirmVote()">Rösta</button>
+</ion-footer>

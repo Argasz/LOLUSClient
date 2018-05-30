@@ -23,6 +23,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { Hmodal2Component} from "../components/hmodal2/hmodal2";
+import { VoteComponent } from "../components/vote/vote";
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { HTTP } from '@ionic-native/http';
@@ -50,7 +51,8 @@ export const firebaseConfig = {
     SettingsPage,
     GoogleMapComponent,
     HmodalComponent,
-    Hmodal2Component
+    Hmodal2Component,
+    VoteComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +73,8 @@ export const firebaseConfig = {
     SettingsPage,
     HmodalComponent,
     Hmodal2Component,
-    GoogleMapComponent
+    GoogleMapComponent,
+    VoteComponent
   ],
   providers: [
     InAppBrowser,

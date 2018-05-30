@@ -3,13 +3,31 @@ hmodal {
     text-align: center;
   }
 
-  .left{
-    text-align: left;
+  ion-title {
+     text-align: center;
+ }
+
+ .map {
+    height: 70%;
+    pointer-events: none;
+}
+
+  .left {
+    text-align: center;
+    font-size: 17px;
   }
 
   #map {
     height:90%;
   }
+
+  .button-col {
+     text-align: center;
+ }
+
+ .comment-bttn {
+    background-color: color($colors, orange);
+    color: color($colors, light);
 }
 
-
+}
