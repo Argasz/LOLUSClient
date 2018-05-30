@@ -25,9 +25,6 @@ export class HomePage {
 
     }
 
-    ionViewWillEnter(){
-
-    }
 
     signInWithEmail(user: string, password: string) {
         firebase.auth()
