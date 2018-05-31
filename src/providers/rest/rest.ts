@@ -13,7 +13,7 @@ export class RestProvider {
 
   private apiUrl = 'https://pvt.dsv.su.se/Group07';
   private googleRevUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
-  private geoApiKey = 'AIzaSyDM4lF22az4fKhqSGbsbUS0gYyCjdLgzqo';
+  private geoApiKey = ''; //API KEY HERE
 
     constructor(public http: HttpClient) {
         //console.log('Hello RestServiceProvider Provider');
